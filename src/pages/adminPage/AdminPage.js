@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import Form from "./form/Form";
+
 export default function AdminPage() {
   return (
     <>
@@ -6,6 +8,7 @@ export default function AdminPage() {
         <div>Admin Page</div>
         <Link to="/">back MainPage</Link>
       </div>
+      <Form />
     </>
   );
 }

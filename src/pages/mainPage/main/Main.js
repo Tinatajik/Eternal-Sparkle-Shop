@@ -1,4 +1,5 @@
 import Category from "./Category";
+import ShopLatest from "./ShopLatest";
 
 export default function Main() {
   return (
@@ -16,6 +17,15 @@ export default function Main() {
         </div>
       </div>
       <Category />
+      <div className="w-full bg-[#0D3B66] flex justify-center items-center mt-5">
+        <p className="w-[40%]  text-[#F4D35E] text-lg p-6">
+          They say you should always ask someone about their values on a first
+          date, so here are ours. We make our pieces at the same places other
+          premium brands do, so you're getting that high-level quality — but
+          without the high-level price. You're welcome.
+        </p>
+      </div>
+      <ShopLatest />
     </>
   );
 }
