@@ -1,11 +1,14 @@
-import { Outlet, Link } from "react-router-dom";
+import Footer from "./footer/Footr";
+import Header from "./header/Header";
+import Main from "./main/Main";
+import NavBar from "./navBar/NavBar";
 export default function MainPage() {
   return (
     <>
-      <div className="flex justify-around mt-7">
-        <div>Main Page</div>
-        <Link to="/adminPage">go to Admin Page</Link>
-      </div>
+      <Header />
+      <NavBar />
+      <Main />
+      <Footer />
     </>
   );
 }
