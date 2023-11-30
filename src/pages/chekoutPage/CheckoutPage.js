@@ -1,5 +1,9 @@
 import { Link } from "react-router-dom";
+import React from "react";
 export default function CheckoutPage() {
+  const handlePaymentClick = () => {
+    window.location.href = 'http://localhost:3001/';
+  };
   return (
     <>
       <div className="flex flex-col gap-5 items-center mt-10 font-bold text-[#0D3B66]">
@@ -29,9 +33,7 @@ export default function CheckoutPage() {
           <input type="date" className={InputButton} />
         </div>
         <div className="bg-[#EE964B]  text-[#0D3B66] text-xl font-bold py-2 px-5 rounded-lg mt-10">
-          <Link to="/paymentPage">
-            <button>Pay</button>
-          </Link>
+            <button onClick={handlePaymentClick}>Pay</button>
         </div>
       </div>
     </>
