@@ -27,11 +27,10 @@ export default function PanelManagment() {
 
   return (
     <>
-      <div className="flex justify-around mt-5">
-        <div>Panel Management</div>
+      <div className="flex justify-around items-center mt-5 p-5">
+        <Link to="/adminPage"><img width="60" height="60" src="https://img.icons8.com/bubbles/50/back.png" alt="back"/></Link>
         <Nav handleClick={handleNavClick} selectedComponent={selectedComponent} />
-        <Link to="/adminPage">back AdminPage</Link>
-      </div>
+        <div><img width="60" height="60" src="https://img.icons8.com/stickers/100/management.png" alt="management"/></div></div>
       {renderComponent()}
     </>
   );

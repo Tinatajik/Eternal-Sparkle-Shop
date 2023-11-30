@@ -6,7 +6,7 @@ export default function Cart() {
         <div className="flex flex-col gap-10 mt-5 px-7">
           <div className="flex justify-between">
             <p className="text-2xl">Shopping Cart</p>
-            <button>back</button>
+            <button><img width="45" height="45" src="https://img.icons8.com/bubbles/50/back.png" alt="back"/></button>
           </div>
           <div className="flex flex-col gap-10">
             <div className="flex gap-5">

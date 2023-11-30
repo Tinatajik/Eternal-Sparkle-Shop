@@ -2,7 +2,7 @@ import React from "react";
 
 const Nav = ({ handleClick, selectedComponent }) => {
   return (
-    <div className="flex gap-5 border-2 px-4 py-2 text-[#0D3B66] border-[#EE964B] font-bold text-lg">
+    <div className="flex gap-5 border-2 ml-5 px-4 py-2 text-[#0D3B66] border-[#EE964B] font-bold text-lg">
       <button
         onClick={() => handleClick("Products")}
         className={selectedComponent === "Products" ? "active" : ""}
