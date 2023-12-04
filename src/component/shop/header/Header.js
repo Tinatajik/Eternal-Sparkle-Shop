@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { LoginAdmin } from "../../../router/path-route/PathRoute";
-import Cart from "../../../templates/shop/cart/Cart";
+import Cart from "../../../pages/shop/cart/Cart";
 export default function Header() {
   const [showCart, setShowCart] = useState(false);
   const [isCheckoutPage, setIsCheckoutPage] = useState(false);
