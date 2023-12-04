@@ -5,19 +5,37 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import { AuthApi } from "../../../api/api";
+
+const validationSchema = Yup.object().shape({
+  username: Yup.string()
+    .required("Username is required")
+    .min(2, "Username must be at least 2 characters"),
+  password: Yup.string()
+    .required("Password is required")
+    .min(8, "Password must be at least 8 characters")
+    .matches(
+      /^(?=.*[A-Za-z])(?=.*\d)/,
+      "Password must contain at least one letter and one number"
+    ),
+});
+
 const LoginForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
 
-  const handleLogin = async () => {
+  const initialValues = {
+    username: "",
+    password: "",
+  };
+
+  const [passwordVisible, setPasswordVisible] = useState(false);
+
+  const handleLogin = async (values, { setSubmitting }) => {
     try {
-      const response = await axios.post(AuthApi, {
-        username,
-        password,
-      });
+      const response = await axios.post(AuthApi, values);
       dispatch(loginSuccess(response.data));
 
       toast.success("Login successful!", {
@@ -36,6 +54,8 @@ const LoginForm = () => {
         autoClose: 3000,
         hideProgressBar: true,
       });
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -47,33 +67,61 @@ const LoginForm = () => {
           <p className="text-center mb-6">
             Welcome back! Log into your account below to continue.
           </p>
-          <label>User Name</label>
-          <input
-            type="text"
-            className="p-2 bg-[#F4D35E] outline-none rounded-md"
-            id="username"
-            name="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-          <label>Password</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="p-2 bg-[#F4D35E] outline-none rounded-md"
-          />
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={handleLogin}
+          >
+            <Form>
+              <div className="flex flex-col ">
+                <div className="flex flex-col gap-2">
+                  <label>User Name</label>
+                  <Field
+                    type="text"
+                    name="username"
+                    className="p-2 bg-[#F4D35E] outline-none rounded-md"
+                  />
+                  <ErrorMessage
+                    name="username"
+                    component="div"
+                    className="text-red-500"
+                  />
+                </div>
+                <div className="flex flex-col gap-2 mt-6">
+                  <label>Password</label>
+                  <Field
+                    type={passwordVisible ? "text" : "password"}
+                    name="password"
+                    className="p-2 bg-[#F4D35E] outline-none rounded-md"
+                  />
+                  <img
+                    className="absolute ml-[21rem] mt-10 cursor-pointer"
+                    width="38"
+                    height="38"
+                    src={
+                      passwordVisible
+                        ? "https://img.icons8.com/color/48/invisible.png"
+                        : "https://img.icons8.com/color/48/visible.png"
+                    }
+                    alt="visible--v1"
+                    onClick={() => setPasswordVisible(!passwordVisible)}
+                  />
+                  <ErrorMessage
+                    name="password"
+                    component="div"
+                    className="text-red-500"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="bg-[#EE964B]  text-[#0D3B66] text-xl font-bold flex justify-center py-2 px-5 rounded-lg w-1/2 mt-8 ml-[6rem]"
+                >
+                  LOG IN
+                </button>
+              </div>
+            </Form>
+          </Formik>
         </div>
-        <button
-          onClick={handleLogin}
-          className="bg-[#EE964B]  text-[#0D3B66] text-xl font-bold py-2 px-5 rounded-lg"
-        >
-          LOG IN
-        </button>
       </div>
     </>
   );
