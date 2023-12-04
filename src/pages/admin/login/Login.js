@@ -2,30 +2,24 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../../../redux/admin/AuthSlice";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // Import useNavigate hook
+import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { AuthApi } from "../../../api/api";
 const LoginForm = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate(); // Initialize useNavigate hook
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:8000/api/auth/login",
-        {
-          username,
-          password,
-        }
-      );
-
-      // Assuming the server returns user data upon successful login
+      const response = await axios.post(AuthApi, {
+        username,
+        password,
+      });
       dispatch(loginSuccess(response.data));
 
-      // Show success toast
       toast.success("Login successful!", {
         position: "top-right",
         autoClose: 3000,
@@ -33,13 +27,10 @@ const LoginForm = () => {
       });
 
       setTimeout(() => {
-        // Redirect to the admin home page
-        navigate("/HomeAdmin"); // Adjust the path based on your route structure
+        navigate("/HomeAdmin");
       }, 1500);
     } catch (error) {
       console.error("Login failed:", error);
-      // Handle login failure, show an error message, etc.
-      // Handle login failure, show an error toast
       toast.error("Login failed. Please check your credentials.", {
         position: "top-right",
         autoClose: 3000,
