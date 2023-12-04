@@ -23,9 +23,13 @@ export default function Header() {
             alt="search--v1"
           />
         </div>
+
         <div className="w-[15%] ml-20">
-          <img src="./Image/logo.jpg" />
+          <Link to="/">
+            <img src="./Image/logo.jpg" />
+          </Link>
         </div>
+
         <div className="flex gap-4">
           <Link to={LoginAdmin}>
             <img

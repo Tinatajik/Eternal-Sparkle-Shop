@@ -44,6 +44,18 @@ export default function SideBar() {
             </li>
           </Link>
         </ul>
+        <Link to="/">
+          <div className="absolute bottom-20 left-12 text-xl text-[#FAF0CA]">
+            <p>Go to Shop</p>
+            <img
+              className="ml-8 mt-3"
+              width="44"
+              height="44"
+              src="https://img.icons8.com/dusk/64/shopify.png"
+              alt="shopify"
+            />
+          </div>
+        </Link>
       </aside>
     </>
   );
