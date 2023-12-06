@@ -11,6 +11,7 @@ const Products = () => {
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(3);
+  const [categories, setCategories] = useState([]);
 
   const [error, setError] = useState(null);
 
@@ -28,24 +29,38 @@ const Products = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(
+        const productsResponse = await fetch(
           `http://localhost:8000/api/products?limit=${limit}&page=${currentPage}`
         );
 
-        if (!response.ok) {
+        if (!productsResponse.ok) {
           throw new Error(
-            `Failed to fetch products. Status: ${response.status}`
+            `Failed to fetch products. Status: ${productsResponse.status}`
           );
         }
 
-        const data = await response.json();
-        const productList = data?.data?.products || [];
+        const productsData = await productsResponse.json();
+        const productList = productsData?.data?.products || [];
         setProducts(productList);
         setError(null);
 
         if (productList.length === 0 && currentPage > 1) {
           setError("Page not found");
         }
+
+        const categoriesResponse = await fetch(
+          "http://localhost:8000/api/categories"
+        );
+
+        if (!categoriesResponse.ok) {
+          throw new Error(
+            `Failed to fetch categories. Status: ${categoriesResponse.status}`
+          );
+        }
+
+        const categoriesData = await categoriesResponse.json();
+        const categoryList = categoriesData?.data?.categories || [];
+        setCategories(categoryList);
       } catch (error) {
         console.error("Error fetching data:", error);
         setProducts([]);
@@ -55,6 +70,12 @@ const Products = () => {
 
     fetchProducts();
   }, [currentPage, limit]);
+
+  const getCategoryNameById = (categoryId) => {
+    const category = categories.find((cat) => cat._id === categoryId);
+    return category ? category.name : "Unknown Category";
+  };
+
   const handleNextPage = () => {
     const nextPage = currentPage + 1;
     updateUrl(nextPage);
@@ -100,7 +121,9 @@ const Products = () => {
                       />
                     </td>
                     <td className={tableStyle}>{product.name}</td>
-                    <td className={tableStyle}>{product.category}</td>
+                    <td className={tableStyle}>
+                      {getCategoryNameById(product.category)}
+                    </td>
                     <td className={tableStyle}>
                       <div className="flex gap-3">
                         <button>Edit</button>
