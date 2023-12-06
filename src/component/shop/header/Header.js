@@ -30,9 +30,7 @@ export default function Header() {
         <div>
           <img
             onClick={openModal}
-
             className="cursor-pointer"
-master
             width="35"
             height="35"
             src="https://img.icons8.com/dusk/64/search--v1.png"
