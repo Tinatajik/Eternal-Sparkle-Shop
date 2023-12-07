@@ -7,7 +7,6 @@ const SubCategoriesAdmin = "/sub-categories";
 const Stock = "/stock";
 const Orders = "/orders";
 const User = "/users";
-const ProductAdmin = "/products";
 
 export {
   ProductPage,
@@ -19,5 +18,4 @@ export {
   Stock,
   Orders,
   User,
-  ProductAdmin,
 };
