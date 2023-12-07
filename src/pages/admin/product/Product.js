@@ -4,13 +4,14 @@ import Header from "../../../component/admin/header/Header";
 
 const tableStyle = "border-2 border-[#F95738] text-[#0D3B66] text-md px-3 py-1";
 
-const StocksPrices = () => {
+const Products = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(3);
+  const [categories, setCategories] = useState([]);
 
   const [error, setError] = useState(null);
 
@@ -28,24 +29,38 @@ const StocksPrices = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(
+        const productsResponse = await fetch(
           `http://localhost:8000/api/products?limit=${limit}&page=${currentPage}`
         );
 
-        if (!response.ok) {
+        if (!productsResponse.ok) {
           throw new Error(
-            `Failed to fetch products. Status: ${response.status}`
+            `Failed to fetch products. Status: ${productsResponse.status}`
           );
         }
 
-        const data = await response.json();
-        const productList = data?.data?.products || [];
+        const productsData = await productsResponse.json();
+        const productList = productsData?.data?.products || [];
         setProducts(productList);
         setError(null);
 
         if (productList.length === 0 && currentPage > 1) {
           setError("Page not found");
         }
+
+        const categoriesResponse = await fetch(
+          "http://localhost:8000/api/categories"
+        );
+
+        if (!categoriesResponse.ok) {
+          throw new Error(
+            `Failed to fetch categories. Status: ${categoriesResponse.status}`
+          );
+        }
+
+        const categoriesData = await categoriesResponse.json();
+        const categoryList = categoriesData?.data?.categories || [];
+        setCategories(categoryList);
       } catch (error) {
         console.error("Error fetching data:", error);
         setProducts([]);
@@ -55,6 +70,12 @@ const StocksPrices = () => {
 
     fetchProducts();
   }, [currentPage, limit]);
+
+  const getCategoryNameById = (categoryId) => {
+    const category = categories.find((cat) => cat._id === categoryId);
+    return category ? category.name : "Unknown Category";
+  };
+
   const handleNextPage = () => {
     const nextPage = currentPage + 1;
     updateUrl(nextPage);
@@ -66,7 +87,7 @@ const StocksPrices = () => {
   };
 
   const updateUrl = (page) => {
-    navigate(`/stock?page=${page}&limit=${limit}`);
+    navigate(`/products?page=${page}&limit=${limit}`);
   };
 
   return (
@@ -75,7 +96,7 @@ const StocksPrices = () => {
       <div className="absolute top-10 w-full">
         <div className="flex justify-end mt-10">
           <button className="bg-[#F95738] text-[#0D3B66] rounded-lg text-lg px-3 py-2 font-bold absolute right-24 top-20">
-            Save
+            Add Product
           </button>
         </div>
         <div className="flex justify-center items-center mt-10">
@@ -87,8 +108,8 @@ const StocksPrices = () => {
                 <tr className={tableStyle}>
                   <th className={tableStyle}>Image</th>
                   <th className={tableStyle}>Product Name</th>
-                  <th className={tableStyle}>Prices</th>
-                  <th className={tableStyle}>Stocks</th>
+                  <th className={tableStyle}>Category</th>
+                  <th className={tableStyle}></th>
                 </tr>
                 {products.map((product) => (
                   <tr key={product._id}>
@@ -96,11 +117,19 @@ const StocksPrices = () => {
                       <img
                         className="w-[7rem] bg-white rounded-full"
                         src={product.images}
+                        alt={product.name}
                       />
                     </td>
                     <td className={tableStyle}>{product.name}</td>
-                    <td className={tableStyle}>{product.price}$</td>
-                    <td className={tableStyle}>{product.quantity}</td>
+                    <td className={tableStyle}>
+                      {getCategoryNameById(product.category)}
+                    </td>
+                    <td className={tableStyle}>
+                      <div className="flex gap-3">
+                        <button>Edit</button>
+                        <button>Delete</button>
+                      </div>
+                    </td>
                   </tr>
                 ))}
               </table>
@@ -125,4 +154,4 @@ const StocksPrices = () => {
   );
 };
 
-export default StocksPrices;
+export default Products;

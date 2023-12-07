@@ -22,7 +22,9 @@ import {
   Stock,
   Orders,
   User,
+  ProductAdmin,
 } from "./path-route/PathRoute";
+import Products from "../pages/admin/product/Product";
 
 export default function Router() {
   return (
@@ -43,6 +45,7 @@ export default function Router() {
               <Route path={Orders} element={<Order />} />
               <Route path={Stock} element={<StocksPrices />} />
               <Route path={User} element={<Users />} />
+              <Route path={ProductAdmin} element={<Products />} />
             </Route>
           </Routes>
         </BrowserRouter>
