@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
 import Header from "../../../component/admin/header/Header";
+import { CategoryApi, ProductApi } from "../../../api/api";
 
 const tableStyle = "border-2 border-[#F95738] text-[#0D3B66] text-md px-3 py-1";
 
@@ -11,6 +13,7 @@ const Products = () => {
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(3);
+  const [categories, setCategories] = useState([]);
 
   const [error, setError] = useState(null);
 
@@ -28,24 +31,27 @@ const Products = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:8000/api/products?limit=${limit}&page=${currentPage}`
-        );
+        const productsResponse = await axios.get(ProductApi, {
+          params: {
+            limit,
+            page: currentPage,
+          },
+        });
 
-        if (!response.ok) {
-          throw new Error(
-            `Failed to fetch products. Status: ${response.status}`
-          );
-        }
-
-        const data = await response.json();
-        const productList = data?.data?.products || [];
+        const productsData = productsResponse.data;
+        const productList = productsData?.data?.products || [];
         setProducts(productList);
         setError(null);
 
         if (productList.length === 0 && currentPage > 1) {
           setError("Page not found");
         }
+
+        const categoriesResponse = await axios.get(CategoryApi);
+
+        const categoriesData = categoriesResponse.data;
+        const categoryList = categoriesData?.data?.categories || [];
+        setCategories(categoryList);
       } catch (error) {
         console.error("Error fetching data:", error);
         setProducts([]);
@@ -55,6 +61,12 @@ const Products = () => {
 
     fetchProducts();
   }, [currentPage, limit]);
+
+  const getCategoryNameById = (categoryId) => {
+    const category = categories.find((cat) => cat._id === categoryId);
+    return category ? category.name : "Unknown Category";
+  };
+
   const handleNextPage = () => {
     const nextPage = currentPage + 1;
     updateUrl(nextPage);
@@ -100,7 +112,9 @@ const Products = () => {
                       />
                     </td>
                     <td className={tableStyle}>{product.name}</td>
-                    <td className={tableStyle}>{product.category}</td>
+                    <td className={tableStyle}>
+                      {getCategoryNameById(product.category)}
+                    </td>
                     <td className={tableStyle}>
                       <div className="flex gap-3">
                         <button>Edit</button>
