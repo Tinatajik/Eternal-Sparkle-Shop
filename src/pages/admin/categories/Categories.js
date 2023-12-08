@@ -12,6 +12,7 @@ const Categories = () => {
   const [categories, setCategories] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(3);
+
   const [totalPages, setTotalPages] = useState(1);
 
   const [error, setError] = useState(null);
@@ -41,6 +42,17 @@ const Categories = () => {
         );
 
         const data = response.data;
+        const response = await fetch(
+          `http://localhost:8000/api/categories?limit=${limit}&page=${currentPage}`
+        );
+
+        if (!response.ok) {
+          throw new Error(
+            `Failed to fetch categories. Status: ${response.status}`
+          );
+        }
+
+        const data = await response.json();
         const categoryList = data?.data?.categories || [];
         setCategories(categoryList);
         setError(null);
@@ -138,6 +150,8 @@ const Categories = () => {
             className="mx-2"
             disabled={currentPage === totalPages}
           >
+          <span>Page {currentPage}</span>
+          <button onClick={handleNextPage} className="mx-2">
             Next
           </button>
         </div>
