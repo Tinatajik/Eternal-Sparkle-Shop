@@ -12,6 +12,7 @@ const SubCategories = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(3);
   const [categoryNames, setCategoryNames] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -46,6 +47,11 @@ const SubCategories = () => {
         if (subcategoryList.length === 0 && currentPage > 1) {
           setError("Page not found");
         }
+
+        const totalItems = data?.total || 0;
+        const calculatedTotalPages = Math.ceil(totalItems / limit);
+
+        setTotalPages(calculatedTotalPages);
 
         const names = await Promise.all(
           subcategoryList.map(async (subcategory) => {
@@ -146,8 +152,14 @@ const SubCategories = () => {
           >
             Prev
           </button>
-          <span>Page {currentPage}</span>
-          <button onClick={handleNextPage} className="mx-2">
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={handleNextPage}
+            className="mx-2"
+            disabled={currentPage === totalPages}
+          >
             Next
           </button>
         </div>
