@@ -10,7 +10,7 @@ export default function Order() {
   const location = useLocation();
 
   const queryParams = new URLSearchParams(location.search);
-  const currentPage = parseInt(queryParams.get("page"));
+  const currentPage = parseInt(queryParams.get("page")) || 1; // Provide a default value of 1
 
   const [orders, setOrders] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState(true);

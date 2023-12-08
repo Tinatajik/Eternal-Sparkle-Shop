@@ -46,17 +46,6 @@ const Products = () => {
         });
 
         const productsData = productsResponse.data;
-        const productsResponse = await fetch(
-          `http://localhost:8000/api/products?limit=${limit}&page=${currentPage}`
-        );
-
-        if (!productsResponse.ok) {
-          throw new Error(
-            `Failed to fetch products. Status: ${productsResponse.status}`
-          );
-        }
-
-        const productsData = await productsResponse.json();
         const productList = productsData?.data?.products || [];
         setProducts(productList);
         setError(null);
@@ -68,17 +57,6 @@ const Products = () => {
         const categoriesResponse = await axios.get(CategoryApi);
 
         const categoriesData = categoriesResponse.data;
-        const categoriesResponse = await fetch(
-          "http://localhost:8000/api/categories"
-        );
-
-        if (!categoriesResponse.ok) {
-          throw new Error(
-            `Failed to fetch categories. Status: ${categoriesResponse.status}`
-          );
-        }
-
-        const categoriesData = await categoriesResponse.json();
         const categoryList = categoriesData?.data?.categories || [];
         setCategories(categoryList);
 
@@ -170,11 +148,7 @@ const Products = () => {
             Prev
           </button>
           <TotalPage currentPage={currentPage} totalPages={totalPages} />
-          <button
-            onClick={handleNextPage}
-            disabled={currentPage === totalPages}
-            className="mx-2"
-          >
+          <button onClick={handleNextPage} className="mx-2">
             Next
           </button>
         </div>
