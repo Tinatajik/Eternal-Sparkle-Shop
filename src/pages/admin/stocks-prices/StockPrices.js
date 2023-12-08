@@ -11,6 +11,7 @@ const StocksPrices = () => {
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(3);
+  const [totalPages, setTotalPages] = useState(1);
 
   const [error, setError] = useState(null);
 
@@ -39,13 +40,19 @@ const StocksPrices = () => {
         }
 
         const data = await response.json();
+        console.log("API Response:", data);
+
         const productList = data?.data?.products || [];
         setProducts(productList);
         setError(null);
 
-        if (productList.length === 0 && currentPage > 1) {
-          setError("Page not found");
-        }
+        const totalItems = data?.total || 0;
+        console.log("Total Items:", totalItems);
+
+        const calculatedTotalPages = Math.ceil(totalItems / limit);
+        console.log("Calculated Total Pages:", calculatedTotalPages);
+
+        setTotalPages(calculatedTotalPages);
       } catch (error) {
         console.error("Error fetching data:", error);
         setProducts([]);
@@ -55,9 +62,12 @@ const StocksPrices = () => {
 
     fetchProducts();
   }, [currentPage, limit]);
+
   const handleNextPage = () => {
     const nextPage = currentPage + 1;
-    updateUrl(nextPage);
+    if (nextPage <= totalPages) {
+      updateUrl(nextPage);
+    }
   };
 
   const handlePrevPage = () => {
@@ -96,6 +106,7 @@ const StocksPrices = () => {
                       <img
                         className="w-[7rem] bg-white rounded-full"
                         src={product.images}
+                        alt={`${product.name} Image`}
                       />
                     </td>
                     <td className={tableStyle}>{product.name}</td>
@@ -115,8 +126,14 @@ const StocksPrices = () => {
           >
             Prev
           </button>
-          <span>Page {currentPage}</span>
-          <button onClick={handleNextPage} className="mx-2">
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={handleNextPage}
+            className="mx-2"
+            disabled={currentPage === totalPages}
+          >
             Next
           </button>
         </div>
