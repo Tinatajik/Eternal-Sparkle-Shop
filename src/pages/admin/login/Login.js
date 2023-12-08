@@ -45,7 +45,7 @@ const LoginForm = () => {
       });
 
       setTimeout(() => {
-        navigate("/orders");
+        navigate("/orders?page=1");
       }, 1500);
     } catch (error) {
       console.error("Login failed:", error);
