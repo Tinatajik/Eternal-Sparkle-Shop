@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
 import Header from "../../../component/admin/header/Header";
 
 const tableStyle = "border-2 border-[#F95738] text-[#0D3B66] text-md px-3 py-1";
@@ -11,6 +12,8 @@ const Categories = () => {
   const [categories, setCategories] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(3);
+
+  const [totalPages, setTotalPages] = useState(1);
 
   const [error, setError] = useState(null);
 
@@ -28,6 +31,17 @@ const Categories = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
+        const response = await axios.get(
+          `http://localhost:8000/api/categories`,
+          {
+            params: {
+              limit,
+              page: currentPage,
+            },
+          }
+        );
+
+        const data = response.data;
         const response = await fetch(
           `http://localhost:8000/api/categories?limit=${limit}&page=${currentPage}`
         );
@@ -46,6 +60,11 @@ const Categories = () => {
         if (categoryList.length === 0 && currentPage > 1) {
           setError("Page not found");
         }
+
+        const totalItems = data?.total || 0;
+        const calculatedTotalPages = Math.ceil(totalItems / limit);
+
+        setTotalPages(calculatedTotalPages);
       } catch (error) {
         console.error("Error fetching data:", error);
         setCategories([]);
@@ -98,7 +117,7 @@ const Categories = () => {
                         "en-US",
                         {
                           year: "numeric",
-                          month: "long", // or 'short' for abbreviated month name
+                          month: "long",
                           day: "numeric",
                         }
                       )}
@@ -123,6 +142,14 @@ const Categories = () => {
           >
             Prev
           </button>
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={handleNextPage}
+            className="mx-2"
+            disabled={currentPage === totalPages}
+          >
           <span>Page {currentPage}</span>
           <button onClick={handleNextPage} className="mx-2">
             Next

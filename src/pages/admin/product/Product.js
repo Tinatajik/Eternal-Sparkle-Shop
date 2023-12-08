@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
 import Header from "../../../component/admin/header/Header";
+import { CategoryApi, ProductApi } from "../../../api/api";
 
 const tableStyle = "border-2 border-[#F95738] text-[#0D3B66] text-md px-3 py-1";
 
@@ -29,6 +31,14 @@ const Products = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+        const productsResponse = await axios.get(ProductApi, {
+          params: {
+            limit,
+            page: currentPage,
+          },
+        });
+
+        const productsData = productsResponse.data;
         const productsResponse = await fetch(
           `http://localhost:8000/api/products?limit=${limit}&page=${currentPage}`
         );
@@ -48,6 +58,9 @@ const Products = () => {
           setError("Page not found");
         }
 
+        const categoriesResponse = await axios.get(CategoryApi);
+
+        const categoriesData = categoriesResponse.data;
         const categoriesResponse = await fetch(
           "http://localhost:8000/api/categories"
         );
