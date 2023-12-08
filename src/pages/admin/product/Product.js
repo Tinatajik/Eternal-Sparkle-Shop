@@ -6,6 +6,12 @@ import { CategoryApi, ProductApi } from "../../../api/api";
 
 const tableStyle = "border-2 border-[#F95738] text-[#0D3B66] text-md px-3 py-1";
 
+const TotalPage = ({ currentPage, totalPages }) => (
+  <span>
+    Page {currentPage} of {totalPages}
+  </span>
+);
+
 const Products = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -14,6 +20,7 @@ const Products = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(3);
   const [categories, setCategories] = useState([]);
+  const [totalPages, setTotalPages] = useState(1); // Moved totalPages state here
 
   const [error, setError] = useState(null);
 
@@ -74,6 +81,11 @@ const Products = () => {
         const categoriesData = await categoriesResponse.json();
         const categoryList = categoriesData?.data?.categories || [];
         setCategories(categoryList);
+
+        const totalItems = productsData?.total || 0;
+        const calculatedTotalPages = Math.ceil(totalItems / limit);
+
+        setTotalPages(calculatedTotalPages); // Update the totalPages state
       } catch (error) {
         console.error("Error fetching data:", error);
         setProducts([]);
@@ -157,8 +169,12 @@ const Products = () => {
           >
             Prev
           </button>
-          <span>Page {currentPage}</span>
-          <button onClick={handleNextPage} className="mx-2">
+          <TotalPage currentPage={currentPage} totalPages={totalPages} />
+          <button
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages}
+            className="mx-2"
+          >
             Next
           </button>
         </div>
