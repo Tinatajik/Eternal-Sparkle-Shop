@@ -5,30 +5,33 @@ import Header from "../../../component/admin/header/Header";
 
 const tableStyle = "border-2 border-[#F95738] text-[#0D3B66] text-md px-3 py-1";
 
-const Order = () => {
+export default function Order() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const queryParams = new URLSearchParams(location.search);
+  const currentPage = parseInt(queryParams.get("page"));
+
   const [orders, setOrders] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [limit, setLimit] = useState(3);
+  const [selectedStatus, setSelectedStatus] = useState(true);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/orders?page=${currentPage}&limit=${limit}`
+          `http://localhost:8000/api/orders?deliveryStatus=${selectedStatus}&page=${currentPage}&limit=3`
         );
+
         console.log("API Response:", response.data);
 
         if (
           response.data &&
-          response.data.data &&
+          response.data.hasOwnProperty("total_pages") &&
           Array.isArray(response.data.data.orders)
         ) {
           const ordersWithUsernames = await Promise.all(
             response.data.data.orders.map(async (order) => {
-              console.log("Fetching user details for order:", order);
               try {
                 const userResponse = await axios.get(
                   `http://localhost:8000/api/users/${order.user}`
@@ -58,10 +61,15 @@ const Order = () => {
             })
           );
 
+          console.log("Orders with Usernames:", ordersWithUsernames);
+
           setOrders(ordersWithUsernames);
+
+          // Set total pages
+          setTotalPages(response.data.total_pages);
         } else {
           console.error(
-            'Invalid response format. Expected an array under the "data.orders" property.'
+            'Invalid response format. Expected an array under the "data.orders" property or "total_pages" in the response.'
           );
         }
       } catch (error) {
@@ -70,50 +78,49 @@ const Order = () => {
     };
 
     fetchOrders();
-  }, [currentPage, limit]);
+  }, [selectedStatus, currentPage]);
 
-  useEffect(() => {
-    const pageParam = new URLSearchParams(location.search).get("page");
-    const limitParam = new URLSearchParams(location.search).get("limit");
-
-    const page = pageParam ? parseInt(pageParam) : 1;
-    const newLimit = limitParam ? parseInt(limitParam) : limit;
-
-    setCurrentPage(page);
-    setLimit(newLimit);
-  }, [location.search, limit]);
+  const handleStatusChange = (status) => {
+    setSelectedStatus(status);
+    navigate(`?page=1`);
+  };
 
   const handleNextPage = () => {
     const nextPage = currentPage + 1;
-    updateUrl(nextPage);
+    navigate(`?page=${nextPage}`);
   };
 
   const handlePrevPage = () => {
     const prevPage = Math.max(currentPage - 1, 1);
-    updateUrl(prevPage);
-  };
-
-  const updateUrl = (page) => {
-    navigate(`/orders?page=${page}&limit=${limit}`);
+    navigate(`?page=${prevPage}`);
   };
 
   return (
     <>
       <Header />
-      <div className="absolute top-10  w-full">
+      <div className="absolute top-10 w-full">
         <div className="flex justify-end mt-14 mr-14">
           <div className="flex gap-5">
             <div className="flex gap-3 ">
               <input
                 type="radio"
                 id="Delivered"
-                name="Delivered"
-                value="Delivered"
+                name="orderStatus"
+                value={true}
+                checked={selectedStatus === true}
+                onChange={() => handleStatusChange(true)}
               />
               <label htmlFor="Delivered">Delivered orders</label>
             </div>
             <div className="flex gap-3 ">
-              <input type="radio" id="Pending" name="Pending" value="Pending" />
+              <input
+                type="radio"
+                id="Pending"
+                name="orderStatus"
+                value={false}
+                checked={selectedStatus === false}
+                onChange={() => handleStatusChange(false)}
+              />
               <label htmlFor="Pending">Pending orders</label>
             </div>
           </div>
@@ -135,7 +142,6 @@ const Order = () => {
                     <td className={tableStyle}>{order.username}</td>
                     <td className={tableStyle}>{order.totalPrice} $</td>
                     <td className={tableStyle}>
-                      {" "}
                       {new Date(order.createdAt).toLocaleDateString("en-US", {
                         year: "numeric",
                         month: "long",
@@ -157,16 +163,26 @@ const Order = () => {
             </tbody>
           </table>
         </div>
-        <div className="flex justify-center mt-4">
-          <button onClick={handlePrevPage} disabled={currentPage === 1}>
+        <div className="flex justify-center items-center mt-2">
+          <button
+            onClick={handlePrevPage}
+            className="mx-2"
+            disabled={currentPage === 1}
+          >
             Prev
           </button>
-          <span className="mx-2">Page {currentPage}</span>
-          <button onClick={handleNextPage}>Next</button>
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={handleNextPage}
+            className="mx-2"
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
         </div>
       </div>
     </>
   );
-};
-
-export default Order;
+}
