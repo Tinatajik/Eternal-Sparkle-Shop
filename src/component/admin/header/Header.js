@@ -1,5 +1,7 @@
 import React from "react";
 import SideBar from "../side-bar/SideBar";
+import { Link } from "react-router-dom";
+import { HomeAdmin } from "../../../router/path-route/PathRoute";
 export default function Header() {
   return (
     <div className="mx-auto ">
@@ -7,7 +9,9 @@ export default function Header() {
         <header className="bg-[#0D3B66] text-[#EE964B] p-3">
           <div className="flex justify-between items-center">
             <div className="p-1 mx-3 inline-flex">
-              <img src="/Image/logo.jpg" className="w-24" />
+              <Link to={HomeAdmin}>
+                <img src="/Image/logo.jpg" className="w-24" />
+              </Link>
               <i className="fas fa-bars  text-white" />
             </div>
             <div className=" flex flex-row">

@@ -20,8 +20,7 @@ const Products = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(3);
   const [categories, setCategories] = useState([]);
-  const [totalPages, setTotalPages] = useState(1); // Moved totalPages state here
-
+  const [totalPages, setTotalPages] = useState(1);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -63,7 +62,7 @@ const Products = () => {
         const totalItems = productsData?.total || 0;
         const calculatedTotalPages = Math.ceil(totalItems / limit);
 
-        setTotalPages(calculatedTotalPages); // Update the totalPages state
+        setTotalPages(calculatedTotalPages);
       } catch (error) {
         console.error("Error fetching data:", error);
         setProducts([]);
