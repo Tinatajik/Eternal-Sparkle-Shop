@@ -1,20 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { useNavigate, useLocation } from "react-router-dom";
 import Header from "../../../component/admin/header/Header";
+import { useNavigate, useLocation } from "react-router-dom";
+import {
+  setOrders,
+  setSelectedStatus,
+  setTotalPages,
+  setCurrentPage,
+} from "../../../redux/admin/slices/OrderSlice";
 
 const tableStyle = "border-2 border-[#F95738] text-[#0D3B66] text-md px-3 py-1";
 
 export default function Order() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const queryParams = new URLSearchParams(location.search);
-  const currentPage = parseInt(queryParams.get("page")) || 1; // Provide a default value of 1
+  const { orders, selectedStatus, totalPages, currentPage } = useSelector(
+    (state) => state.order
+  );
 
-  const [orders, setOrders] = useState([]);
-  const [selectedStatus, setSelectedStatus] = useState(true);
-  const [totalPages, setTotalPages] = useState(1);
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const currentPage = parseInt(queryParams.get("page")) || 1;
+
+    dispatch(setCurrentPage(currentPage));
+  }, [location.search, dispatch]);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -63,10 +75,8 @@ export default function Order() {
 
           console.log("Orders with Usernames:", ordersWithUsernames);
 
-          setOrders(ordersWithUsernames);
-
-          // Set total pages
-          setTotalPages(response.data.total_pages);
+          dispatch(setOrders(ordersWithUsernames));
+          dispatch(setTotalPages(response.data.total_pages));
         } else {
           console.error(
             'Invalid response format. Expected an array under the "data.orders" property or "total_pages" in the response.'
@@ -78,10 +88,10 @@ export default function Order() {
     };
 
     fetchOrders();
-  }, [selectedStatus, currentPage]);
+  }, [selectedStatus, currentPage, dispatch]);
 
   const handleStatusChange = (status) => {
-    setSelectedStatus(status);
+    dispatch(setSelectedStatus(status));
     navigate(`?page=1`);
   };
 
