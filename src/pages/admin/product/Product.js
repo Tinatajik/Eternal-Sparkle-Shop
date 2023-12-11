@@ -1,38 +1,60 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import Header from "../../../component/admin/header/Header";
 import { CategoryApi, ProductApi } from "../../../api/api";
+import DeleteModal from "../../../modal/admin/delete/DeleteModal";
+import {
+  setProducts,
+  setCurrentPage,
+  setLimit,
+  setCategories,
+  setTotalPages,
+  setError,
+  setSelectedProduct,
+  setModalState,
+} from "../../../redux/admin/slices/ProductsSlice";
 
 const tableStyle = "border-2 border-[#F95738] text-[#0D3B66] text-md px-3 py-1";
 
-const TotalPage = ({ currentPage, totalPages }) => (
-  <span>
-    Page {currentPage} of {totalPages}
-  </span>
-);
+const TotalPage = () => {
+  const currentPage = useSelector((state) => state.products.currentPage);
+  const totalPages = useSelector((state) => state.products.totalPages);
+
+  return (
+    <span>
+      Page {currentPage} of {totalPages}
+    </span>
+  );
+};
 
 const Products = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [products, setProducts] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [limit, setLimit] = useState(3);
-  const [categories, setCategories] = useState([]);
-  const [totalPages, setTotalPages] = useState(1);
-  const [error, setError] = useState(null);
+  const {
+    products,
+    currentPage,
+    limit,
+    categories,
+    totalPages,
+    error,
+    selectedProduct,
+    isModalOpen,
+  } = useSelector((state) => state.products);
 
   useEffect(() => {
     const pageParam = new URLSearchParams(location.search).get("page");
     const limitParam = new URLSearchParams(location.search).get("limit");
 
-    const page = pageParam ? parseInt(pageParam) : 1;
-    const newLimit = limitParam ? parseInt(limitParam) : limit;
+    const page = pageParam ? parseInt(pageParam, 10) : 1;
+    const newLimit = limitParam ? parseInt(limitParam, 10) : limit;
 
-    setCurrentPage(page);
-    setLimit(newLimit);
-  }, [location.search, limit]);
+    dispatch(setCurrentPage(page));
+    dispatch(setLimit(newLimit));
+  }, [location.search, limit, dispatch]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -46,32 +68,35 @@ const Products = () => {
 
         const productsData = productsResponse.data;
         const productList = productsData?.data?.products || [];
-        setProducts(productList);
-        setError(null);
+
+        dispatch(setProducts(productList));
+        dispatch(setError(null));
 
         if (productList.length === 0 && currentPage > 1) {
-          setError("Page not found");
+          dispatch(setError("Page not found"));
         }
 
         const categoriesResponse = await axios.get(CategoryApi);
 
         const categoriesData = categoriesResponse.data;
         const categoryList = categoriesData?.data?.categories || [];
-        setCategories(categoryList);
+
+        dispatch(setCategories(categoryList));
 
         const totalItems = productsData?.total || 0;
         const calculatedTotalPages = Math.ceil(totalItems / limit);
 
-        setTotalPages(calculatedTotalPages);
+        dispatch(setTotalPages(calculatedTotalPages));
       } catch (error) {
         console.error("Error fetching data:", error);
-        setProducts([]);
-        setError("Failed to fetch products. Please try again later.");
+
+        dispatch(setProducts([]));
+        dispatch(setError("Failed to fetch products. Please try again later."));
       }
     };
 
     fetchProducts();
-  }, [currentPage, limit]);
+  }, [currentPage, limit, dispatch]);
 
   const getCategoryNameById = (categoryId) => {
     const category = categories.find((cat) => cat._id === categoryId);
@@ -90,6 +115,50 @@ const Products = () => {
 
   const updateUrl = (page) => {
     navigate(`/products?page=${page}&limit=${limit}`);
+  };
+
+  const handleDeleteClick = (product) => {
+    dispatch(setSelectedProduct(product));
+    dispatch(setModalState(true));
+  };
+
+  const handleModalClose = () => {
+    dispatch(setSelectedProduct(null));
+    dispatch(setModalState(false));
+  };
+
+  const handleDeleteConfirm = async () => {
+    try {
+      await axios.delete(`${ProductApi}/${selectedProduct._id}`);
+
+      const updatedProductsResponse = await axios.get(ProductApi, {
+        params: {
+          limit,
+          page: currentPage,
+        },
+      });
+
+      const updatedProductsData = updatedProductsResponse.data;
+      const updatedProductList = updatedProductsData?.data?.products || [];
+
+      dispatch(setProducts(updatedProductList));
+
+      if (updatedProductList.length === 0 && currentPage > 1) {
+        const newPage = Math.max(currentPage - 1, 1);
+        updateUrl(newPage);
+      }
+
+      const totalItems = updatedProductsData?.total || 0;
+      const calculatedTotalPages = Math.ceil(totalItems / limit);
+
+      dispatch(setTotalPages(calculatedTotalPages));
+
+      handleModalClose();
+    } catch (error) {
+      console.error("Error deleting product:", error);
+
+      handleModalClose();
+    }
   };
 
   return (
@@ -127,9 +196,16 @@ const Products = () => {
                       {getCategoryNameById(product.category)}
                     </td>
                     <td className={tableStyle}>
-                      <div className="flex gap-3">
-                        <button>Edit</button>
-                        <button>Delete</button>
+                      <div className="flex gap-3 font-bold">
+                        <button className="px-2 py-1 bg-[#F4D35E] text-[#EE964B] rounded-lg">
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDeleteClick(product)}
+                          className="px-2 py-1 bg-[#EE964B] text-[#F4D35E] rounded-lg"
+                        >
+                          Delete
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -146,11 +222,22 @@ const Products = () => {
           >
             Prev
           </button>
-          <TotalPage currentPage={currentPage} totalPages={totalPages} />
-          <button onClick={handleNextPage} className="mx-2">
+          <TotalPage />
+          <button
+            onClick={handleNextPage}
+            className="mx-2"
+            disabled={currentPage === totalPages}
+          >
             Next
           </button>
         </div>
+        {selectedProduct && isModalOpen && (
+          <DeleteModal
+            product={selectedProduct}
+            onDeleteConfirm={handleDeleteConfirm}
+            onModalClose={handleModalClose}
+          />
+        )}
       </div>
     </>
   );
