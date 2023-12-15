@@ -1,4 +1,21 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+
+const ProductApi = "http://localhost:8000/api/products";
+
+export const fetchProducts = createAsyncThunk(
+  "products/fetchProducts",
+  async ({ page, limit }) => {
+    const response = await axios.get(ProductApi, {
+      params: {
+        limit,
+        page,
+      },
+    });
+    const productsData = response.data.data.products || [];
+    return productsData;
+  }
+);
 
 const productsSlice = createSlice({
   name: "products",
@@ -37,6 +54,20 @@ const productsSlice = createSlice({
     setModalState: (state, action) => {
       state.isModalOpen = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchProducts.pending, (state) => {
+        state.error = null;
+      })
+      .addCase(fetchProducts.fulfilled, (state, action) => {
+        state.products = action.payload;
+        state.error = null;
+      })
+      .addCase(fetchProducts.rejected, (state, action) => {
+        state.products = [];
+        state.error = action.error.message;
+      });
   },
 });
 

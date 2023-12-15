@@ -105,8 +105,8 @@ const StocksPrices = () => {
                   <tr key={product._id}>
                     <td className={tableStyle}>
                       <img
-                        className="w-[7rem] bg-white rounded-full"
-                        src={product.images}
+                        className="w-[6rem] h-[5rem] bg-white rounded-xl"
+                        src={`http://localhost:8000/images/products/thumbnails/${product.thumbnail}`}
                         alt={`${product.name} Image`}
                       />
                     </td>

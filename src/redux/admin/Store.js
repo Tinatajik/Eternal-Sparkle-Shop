@@ -5,6 +5,7 @@ import orderReducer from "./slices/OrderSlice";
 import categoryReducer from "./slices/CategorySlice";
 import subcategoriesReducer from "./slices/SubCategorySlice";
 import stocksReducer from "./slices/StocksSlice";
+import productModalReducer from "./slices/ProductModalSlice";
 
 export const store = configureStore({
   reducer: {
@@ -14,5 +15,6 @@ export const store = configureStore({
     category: categoryReducer,
     subcategories: subcategoriesReducer,
     stocks: stocksReducer,
+    productModal: productModalReducer,
   },
 });
