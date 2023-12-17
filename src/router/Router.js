@@ -23,8 +23,10 @@ import {
   Orders,
   User,
   ProductAdmin,
+  CartPage,
 } from "./path-route/PathRoute";
 import Products from "../pages/admin/product/Product";
+import Cart from "../pages/shop/cart/Cart";
 
 export default function Router() {
   return (
@@ -35,6 +37,7 @@ export default function Router() {
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
               <Route path={ProductPage} element={<Product />} />
+              <Route path={CartPage} element={<Cart />} />
               <Route path={CheckoutPage} element={<Checkout />} />
               <Route path={LoginAdmin} element={<Login />} />
             </Route>

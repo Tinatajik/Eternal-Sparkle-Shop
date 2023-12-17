@@ -1,19 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { LoginAdmin } from "../../../router/path-route/PathRoute";
-import Cart from "../../../pages/shop/cart/Cart";
+import { CartPage, LoginAdmin } from "../../../router/path-route/PathRoute";
 import SearchModal from "../../../modal/shop/search/Search";
 export default function Header() {
-  const [showCart, setShowCart] = useState(false);
-  const [isCheckoutPage, setIsCheckoutPage] = useState(false);
-
-  const handleCartButtonClick = () => {
-    setShowCart(true);
-  };
-  useEffect(() => {
-    setIsCheckoutPage();
-  }, []);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
@@ -53,15 +42,16 @@ export default function Header() {
               alt="gender-neutral-user"
             />
           </Link>
-          <button onClick={handleCartButtonClick}>
-            <img
-              width="32"
-              height="32"
-              src="https://img.icons8.com/pulsar-color/48/shopping-bag.png"
-              alt="shopping-bag"
-            />
-          </button>
-          {!isCheckoutPage && showCart && <Cart />}
+          <Link to={CartPage}>
+            <button>
+              <img
+                width="32"
+                height="32"
+                src="https://img.icons8.com/pulsar-color/48/shopping-bag.png"
+                alt="shopping-bag"
+              />
+            </button>
+          </Link>
         </div>
       </div>
     </>

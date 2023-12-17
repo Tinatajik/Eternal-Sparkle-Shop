@@ -82,7 +82,7 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
         isOpen ? "flex" : "hidden"
       } fixed overflow-scroll overflow-x-hidden inset-0 items-center justify-center z-50`}
     >
-      <div className="modal-overlay absolute w-full h-[190%] bg-gray-900 opacity-50" />
+      <div className="modal-overlay absolute w-full h-[240%] bg-gray-900 opacity-50" />
       <div className="modal-container mt-[20%] bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
         <div className="modal-content py-4 text-left px-6">
           <div className="flex justify-between items-center pb-3">

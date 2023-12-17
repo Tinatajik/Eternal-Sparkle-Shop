@@ -235,9 +235,10 @@ const StocksPrices = () => {
                             editedValues[`${product._id}_price`] ||
                             product.price
                           }
-                          onChange={(e) =>
-                            handleInputChange(e, product._id, "price")
-                          }
+                          onChange={(e) => {
+                            handleInputChange(e, product._id, "price");
+                            console.log(editedValues);
+                          }}
                           onBlur={() => handleInputBlur(product._id, "price")}
                           onKeyDown={(e) =>
                             handleInputKeyDown(e, product._id, "price")
