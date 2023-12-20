@@ -24,9 +24,13 @@ import {
   User,
   ProductAdmin,
   CartPage,
+  CategoryShop,
+  SubcategoryShop,
 } from "./path-route/PathRoute";
 import Products from "../pages/admin/product/Product";
 import Cart from "../pages/shop/cart/Cart";
+import CategoryPage from "../pages/shop/categoryPage/CategoryPage";
+import SubcategoryPage from "../pages/shop/subcategory/Subcategory";
 
 export default function Router() {
   return (
@@ -37,6 +41,8 @@ export default function Router() {
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
               <Route path={ProductPage} element={<Product />} />
+              <Route path={CategoryShop} element={<CategoryPage />} />
+              <Route path={SubcategoryShop} element={<SubcategoryPage />} />
               <Route path={CartPage} element={<Cart />} />
               <Route path={CheckoutPage} element={<Checkout />} />
               <Route path={LoginAdmin} element={<Login />} />

@@ -6,7 +6,7 @@ const Category = ({ category, products }) => (
   <div className="flex flex-col gap-3">
     <p className="text-[#0D3B66] text-xl font-bold ml-10">{category.name}</p>
     <div className="flex gap-5">
-      <Link to={`/category/${category.name}`}>
+      <Link to={`/categories/${category._id}`}>
         <img
           className="w-[12rem] h-[15rem] mb-20 rounded-lg"
           src={category.icon}
