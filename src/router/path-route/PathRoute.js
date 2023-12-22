@@ -9,6 +9,8 @@ const Orders = "/orders";
 const User = "/users";
 const ProductAdmin = "/products";
 const CartPage = "/cartPage";
+const CategoryShop = "/categories/:categoryId";
+const SubcategoryShop = "/subcategories/:subcategoryId";
 
 export {
   ProductPage,
@@ -22,4 +24,6 @@ export {
   User,
   ProductAdmin,
   CartPage,
+  CategoryShop,
+  SubcategoryShop,
 };
