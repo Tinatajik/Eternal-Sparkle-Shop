@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { ProductPage } from "../../../router/path-route/PathRoute";
 
 const tableStyle = "border-2 border-[#F95738] text-[#0D3B66] text-md px-3 py-1";
 
@@ -7,7 +6,7 @@ const ProductCart = ({ id, name, price, imageUrl }) => {
   return (
     <tr>
       <td className={tableStyle}>
-        <Link to={`${ProductPage}/${name}`}>
+        <Link to={`/productPage/${id}`}>
           <img
             className="w-[6rem] h-[5rem] bg-white rounded-xl"
             src={imageUrl}

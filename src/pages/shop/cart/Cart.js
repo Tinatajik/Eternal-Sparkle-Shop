@@ -21,7 +21,7 @@ export default function Cart() {
             </thead>
             <tbody>
               <ProductCart
-                id={1}
+                id="657f0c883a47a128e4468a27"
                 name="LuLu"
                 price="200$"
                 imageUrl="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfGjPyeQl281wzhqN2dUlMGOZnv7TaOMoHjA&usqp=CAU"
