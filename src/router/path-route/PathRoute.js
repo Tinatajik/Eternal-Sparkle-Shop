@@ -8,6 +8,7 @@ const Stock = "/stock";
 const Orders = "/orders";
 const User = "/users";
 const ProductAdmin = "/products";
+const CartPage = "/cartPage";
 
 export {
   ProductPage,
@@ -20,4 +21,5 @@ export {
   Orders,
   User,
   ProductAdmin,
+  CartPage,
 };
