@@ -17,7 +17,7 @@ const Category = ({ category, products }) => (
       <div className="flex gap-5 justify-center">
         {Array.isArray(products) &&
           products.slice(0, 6).map((product) => (
-            <Link to={`${ProductPage}/${product.name}`}>
+            <Link to={`/productPage/${product._id}`}>
               <div
                 key={product._id}
                 className="flex flex-col justify-center items-center w-[10rem] gap-4 text-[#EE964B] text-lg font-bold text-center"

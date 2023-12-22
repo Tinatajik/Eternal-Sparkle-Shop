@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import Category from "../categories/Categories";
 import ShopLatest from "../shop-latest/ShopLatest";
@@ -64,7 +65,11 @@ export default function Home() {
       />
       <div className="absolute mt-[-10rem] right-28 flex flex-col justify-center items-center gap-5 text-[#F4D35E]  font-bold text-xl">
         <p className=" ">ALWAYS SEEKING THE RARE & BEAUTIFUL</p>
-        <button className="bg-[#0D3B66] w-1/2 py-2 rounded-lg">Shop Now</button>
+        <Link to={`/categories/657080a21f0ed54c5a12f13e`}>
+          <button className="bg-[#0D3B66] w-full px-5 py-2 rounded-lg">
+            Shop Now
+          </button>
+        </Link>
       </div>
       <div className="flex flex-col justify-center items-center mt-5 w-full">
         <h2 className="text-4xl text-[#F95738]">Shop by Category</h2>

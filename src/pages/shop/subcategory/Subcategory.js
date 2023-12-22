@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import Sidebar from "../../../component/shop/side-bar/SideBar";
@@ -14,10 +15,6 @@ const SubcategoryPage = () => {
         const subcategoryResponse = await axios.get(
           `http://localhost:8000/api/subcategories/${subcategoryId}`
         );
-        console.log(
-          `Category ${subcategoryId} response:`,
-          subcategoryResponse.data
-        );
 
         setSubCategoryData(subcategoryResponse.data.data.category);
 
@@ -29,10 +26,6 @@ const SubcategoryPage = () => {
               limit: 6,
             },
           }
-        );
-        console.log(
-          `Products for category ${subcategoryId} response:`,
-          productsResponse.data
         );
 
         setProducts(productsResponse.data.data.products);
@@ -56,17 +49,19 @@ const SubcategoryPage = () => {
         <div className="grid grid-cols-3 gap-4 w-3/4 ">
           {Array.isArray(products) && products.length > 0 ? (
             products.map((product) => (
-              <div key={product._id} className="flex">
-                <img
-                  className="w-40 h-[10rem] rounded-lg"
-                  src={`http://localhost:8000/images/products/thumbnails/${product.thumbnail}`}
-                  alt={product.name}
-                />
-                <div className="flex flex-col gap-4 font-bold text-lg text-[#0D3B66] ml-3 mt-7">
-                  <p>{product.name}</p>
-                  <p>{product.price} $</p>
+              <Link to={`/productPage/${product._id}`}>
+                <div key={product._id} className="flex">
+                  <img
+                    className="w-40 h-[10rem] rounded-lg"
+                    src={`http://localhost:8000/images/products/thumbnails/${product.thumbnail}`}
+                    alt={product.name}
+                  />
+                  <div className="flex flex-col gap-4 font-bold text-lg text-[#0D3B66] ml-3 mt-7">
+                    <p>{product.name}</p>
+                    <p>{product.price} $</p>
+                  </div>
                 </div>
-              </div>
+              </Link>
             ))
           ) : (
             <p>No products found for this category.</p>

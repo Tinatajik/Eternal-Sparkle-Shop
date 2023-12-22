@@ -1,4 +1,4 @@
-const ProductPage = "/productPage";
+const ProductPage = "/productPage/:productId";
 const CheckoutPage = "/checkoutPage";
 const LoginAdmin = "/loginAdmin";
 const HomeAdmin = "/homeAdmin";
