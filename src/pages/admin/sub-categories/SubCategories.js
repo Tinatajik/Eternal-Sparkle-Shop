@@ -1,19 +1,31 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import Header from "../../../component/admin/header/Header";
+import {
+  setSubcategories,
+  setCurrentPage,
+  setLimit,
+  setCategoryNames,
+  setTotalPages,
+  setError,
+} from "../../../redux/admin/slices/SubCategorySlice";
 
 const tableStyle = "border-2 border-[#F95738] text-[#0D3B66] text-md px-3 py-1";
 
 const SubCategories = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [subcategories, setSubcategories] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [limit, setLimit] = useState(3);
-  const [categoryNames, setCategoryNames] = useState([]);
-  const [totalPages, setTotalPages] = useState(1);
-  const [error, setError] = useState(null);
+  const {
+    subcategories,
+    currentPage,
+    limit,
+    categoryNames,
+    totalPages,
+    error,
+  } = useSelector((state) => state.subcategories);
 
   useEffect(() => {
     const pageParam = new URLSearchParams(location.search).get("page");
@@ -22,9 +34,9 @@ const SubCategories = () => {
     const page = pageParam ? parseInt(pageParam) : 1;
     const newLimit = limitParam ? parseInt(limitParam) : limit;
 
-    setCurrentPage(page);
-    setLimit(newLimit);
-  }, [location.search, limit]);
+    dispatch(setCurrentPage(page));
+    dispatch(setLimit(newLimit));
+  }, [location.search, limit, dispatch]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,17 +53,17 @@ const SubCategories = () => {
 
         const data = await response.json();
         const subcategoryList = data?.data?.subcategories || [];
-        setSubcategories(subcategoryList);
-        setError(null);
+        dispatch(setSubcategories(subcategoryList));
+        dispatch(setError(null));
 
         if (subcategoryList.length === 0 && currentPage > 1) {
-          setError("Page not found");
+          dispatch(setError("Page not found"));
         }
 
         const totalItems = data?.total || 0;
         const calculatedTotalPages = Math.ceil(totalItems / limit);
 
-        setTotalPages(calculatedTotalPages);
+        dispatch(setTotalPages(calculatedTotalPages));
 
         const names = await Promise.all(
           subcategoryList.map(async (subcategory) => {
@@ -60,25 +72,29 @@ const SubCategories = () => {
           })
         );
 
-        setCategoryNames(names);
+        dispatch(setCategoryNames(names));
       } catch (error) {
         console.error("Error fetching data:", error);
-        setSubcategories([]);
-        setCategoryNames([]);
-        setError("Failed to fetch subcategories. Please try again later.");
+        dispatch(setSubcategories([]));
+        dispatch(setCategoryNames([]));
+        dispatch(
+          setError("Failed to fetch subcategories. Please try again later.")
+        );
       }
     };
 
     fetchData();
-  }, [currentPage, limit]);
+  }, [currentPage, limit, dispatch]);
 
   const handleNextPage = () => {
     const nextPage = currentPage + 1;
+    dispatch(setCurrentPage(nextPage));
     updateUrl(nextPage);
   };
 
   const handlePrevPage = () => {
     const prevPage = Math.max(currentPage - 1, 1);
+    dispatch(setCurrentPage(prevPage));
     updateUrl(prevPage);
   };
 

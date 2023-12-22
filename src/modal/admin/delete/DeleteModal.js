@@ -1,6 +1,7 @@
 import React from "react";
 
 const DeleteModal = ({ product, onDeleteConfirm, onModalClose }) => {
+  const imagePath = `http://localhost:8000/images/products/thumbnails/${product.thumbnail}`;
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-30 flex items-center justify-center">
       <div className="bg-white p-4 rounded-lg">
@@ -9,7 +10,7 @@ const DeleteModal = ({ product, onDeleteConfirm, onModalClose }) => {
           <p>{product.name}</p>
           <img
             className="w-[7rem] bg-white rounded-full"
-            src={product.images}
+            src={imagePath}
             alt={product.name}
           />
         </div>

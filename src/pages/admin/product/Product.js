@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import Header from "../../../component/admin/header/Header";
 import { CategoryApi, ProductApi } from "../../../api/api";
 import DeleteModal from "../../../modal/admin/delete/DeleteModal";
+import ProductModal from "../../../modal/admin/add-edit/ProductModal";
 import {
   setProducts,
   setCurrentPage,
@@ -15,24 +16,15 @@ import {
   setSelectedProduct,
   setModalState,
 } from "../../../redux/admin/slices/ProductsSlice";
+import ProductRow from "./ProductRow";
 
 const tableStyle = "border-2 border-[#F95738] text-[#0D3B66] text-md px-3 py-1";
-
-const TotalPage = () => {
-  const currentPage = useSelector((state) => state.products.currentPage);
-  const totalPages = useSelector((state) => state.products.totalPages);
-
-  return (
-    <span>
-      Page {currentPage} of {totalPages}
-    </span>
-  );
-};
 
 const Products = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
 
   const {
     products,
@@ -44,6 +36,8 @@ const Products = () => {
     selectedProduct,
     isModalOpen,
   } = useSelector((state) => state.products);
+
+  const [editedProduct, setEditedProduct] = useState(null);
 
   useEffect(() => {
     const pageParam = new URLSearchParams(location.search).get("page");
@@ -71,7 +65,6 @@ const Products = () => {
 
         dispatch(setProducts(productList));
         dispatch(setError(null));
-
         if (productList.length === 0 && currentPage > 1) {
           dispatch(setError("Page not found"));
         }
@@ -161,12 +154,133 @@ const Products = () => {
     }
   };
 
+  const handleAddProductClick = () => {
+    setEditedProduct(null);
+    setIsProductModalOpen(true);
+  };
+
+  const handleEditProductClick = (product) => {
+    setEditedProduct(product);
+    setIsProductModalOpen(true);
+  };
+
+  const handleSaveProduct = async (updatedProduct) => {
+    try {
+      if (editedProduct) {
+        const formData = new FormData();
+        formData.append("thumbnail", updatedProduct.thumbnail);
+        formData.append("name", updatedProduct.name);
+        formData.append("category", updatedProduct.category);
+        formData.append("subcategory", updatedProduct.subcategory);
+        formData.append("price", updatedProduct.price);
+        formData.append("quantity", updatedProduct.quantity);
+        formData.append("brand", updatedProduct.brand);
+        formData.append("description", updatedProduct.description);
+
+        await axios.patch(`${ProductApi}/${editedProduct._id}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NjlhYmU0MmJlMTA0ZTFmMmVlOWVmYyIsImlhdCI6MTcwMjU4OTQ4NSwiZXhwIjoxNzA1MTgxNDg1fQ.hQ5rfFFO47ZuiDU5i-3PXC4GT-59o6R3TZXuJTUyXSc`,
+          },
+        });
+
+        const updatedProductsResponse = await axios.get(ProductApi, {
+          params: {
+            limit,
+            page: currentPage,
+          },
+        });
+
+        const updatedProductsData = updatedProductsResponse.data;
+        const updatedProductList = updatedProductsData?.data?.products || [];
+
+        dispatch(setProducts(updatedProductList));
+        const totalItems = updatedProductsData?.total || 0;
+        const calculatedTotalPages = Math.ceil(totalItems / limit);
+        if (calculatedTotalPages > totalPages) {
+          const nextPage = currentPage + 1;
+          updateUrl(nextPage);
+        }
+
+        dispatch(setTotalPages(calculatedTotalPages));
+
+        handleModalClose();
+      } else {
+        const formData = new FormData();
+        formData.append("thumbnail", updatedProduct.thumbnail);
+        formData.append("name", updatedProduct.name);
+        formData.append("category", updatedProduct.category);
+        formData.append("subcategory", updatedProduct.subcategory);
+        formData.append("price", updatedProduct.price);
+        formData.append("quantity", updatedProduct.quantity);
+        formData.append("brand", updatedProduct.brand);
+        formData.append("description", updatedProduct.description);
+
+        const response = await axios.post(ProductApi, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NjlhYmU0MmJlMTA0ZTFmMmVlOWVmYyIsImlhdCI6MTcwMjU4OTQ4NSwiZXhwIjoxNzA1MTgxNDg1fQ.hQ5rfFFO47ZuiDU5i-3PXC4GT-59o6R3TZXuJTUyXSc`,
+          },
+        });
+
+        const newProductData = response.data;
+
+        const updatedProductsResponse = await axios.get(ProductApi, {
+          params: {
+            limit,
+            page: currentPage,
+          },
+        });
+
+        const updatedProductsData = updatedProductsResponse.data;
+        const updatedProductList = updatedProductsData?.data?.products || [];
+
+        dispatch(setProducts(updatedProductList));
+        const totalItems = updatedProductsData?.total || 0;
+        const calculatedTotalPages = Math.ceil(totalItems / limit);
+        if (calculatedTotalPages > totalPages) {
+          const nextPage = currentPage + 1;
+          updateUrl(nextPage);
+        }
+
+        dispatch(setTotalPages(calculatedTotalPages));
+
+        handleModalClose();
+      }
+    } catch (error) {
+      console.error("Error saving product:", error);
+
+      if (error.response) {
+        console.error("Response data:", error.response.data);
+        console.error("Response status:", error.response.status);
+        console.error("Response headers:", error.response.headers);
+      } else if (error.request) {
+        console.error("No response received:", error.request);
+      } else {
+        console.error("Error setting up the request:", error.message);
+      }
+
+      dispatch(setError("Failed to save product. Please try again later."));
+    }
+  };
+
+  const TotalPage = () => {
+    return (
+      <span>
+        Page {currentPage} of {totalPages}
+      </span>
+    );
+  };
+
   return (
     <>
       <Header />
       <div className="absolute top-10 w-full">
         <div className="flex justify-end mt-10">
-          <button className="bg-[#F95738] text-[#0D3B66] rounded-lg text-lg px-3 py-2 font-bold absolute right-24 top-20">
+          <button
+            onClick={handleAddProductClick}
+            className="bg-[#F95738] text-[#0D3B66] rounded-lg text-lg px-3 py-2 font-bold absolute right-24 top-20"
+          >
             Add Product
           </button>
         </div>
@@ -183,32 +297,13 @@ const Products = () => {
                   <th className={tableStyle}></th>
                 </tr>
                 {products.map((product) => (
-                  <tr key={product._id}>
-                    <td className={tableStyle}>
-                      <img
-                        className="w-[7rem] bg-white rounded-full"
-                        src={product.images}
-                        alt={product.name}
-                      />
-                    </td>
-                    <td className={tableStyle}>{product.name}</td>
-                    <td className={tableStyle}>
-                      {getCategoryNameById(product.category)}
-                    </td>
-                    <td className={tableStyle}>
-                      <div className="flex gap-3 font-bold">
-                        <button className="px-2 py-1 bg-[#F4D35E] text-[#EE964B] rounded-lg">
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => handleDeleteClick(product)}
-                          className="px-2 py-1 bg-[#EE964B] text-[#F4D35E] rounded-lg"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
+                  <ProductRow
+                    key={product._id}
+                    product={product}
+                    getCategoryNameById={getCategoryNameById}
+                    handleDeleteClick={handleDeleteClick}
+                    handleEditProductClick={handleEditProductClick}
+                  />
                 ))}
               </table>
             </>
@@ -236,6 +331,14 @@ const Products = () => {
             product={selectedProduct}
             onDeleteConfirm={handleDeleteConfirm}
             onModalClose={handleModalClose}
+          />
+        )}
+        {isProductModalOpen && (
+          <ProductModal
+            isOpen={isProductModalOpen}
+            onClose={() => setIsProductModalOpen(false)}
+            onSave={handleSaveProduct}
+            product={editedProduct}
           />
         )}
       </div>

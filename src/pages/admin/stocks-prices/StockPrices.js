@@ -1,19 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import Header from "../../../component/admin/header/Header";
+import {
+  setProducts,
+  setCurrentPage,
+  setLimit,
+  setTotalPages,
+  setError,
+} from "../../../redux/admin/slices/StocksSlice";
 
 const tableStyle = "border-2 border-[#F95738] text-[#0D3B66] text-md px-3 py-1";
 
 const StocksPrices = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [products, setProducts] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [limit, setLimit] = useState(3);
-  const [totalPages, setTotalPages] = useState(1);
-
-  const [error, setError] = useState(null);
+  const { products, currentPage, limit, totalPages, error } = useSelector(
+    (state) => state.stocks
+  );
 
   useEffect(() => {
     const pageParam = new URLSearchParams(location.search).get("page");
@@ -22,9 +28,9 @@ const StocksPrices = () => {
     const page = pageParam ? parseInt(pageParam) : 1;
     const newLimit = limitParam ? parseInt(limitParam) : limit;
 
-    setCurrentPage(page);
-    setLimit(newLimit);
-  }, [location.search, limit]);
+    dispatch(setCurrentPage(page));
+    dispatch(setLimit(newLimit));
+  }, [location.search, limit, dispatch]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -40,28 +46,23 @@ const StocksPrices = () => {
         }
 
         const data = await response.json();
-        console.log("API Response:", data);
-
         const productList = data?.data?.products || [];
-        setProducts(productList);
-        setError(null);
+        dispatch(setProducts(productList));
+        dispatch(setError(null));
 
         const totalItems = data?.total || 0;
-        console.log("Total Items:", totalItems);
-
         const calculatedTotalPages = Math.ceil(totalItems / limit);
-        console.log("Calculated Total Pages:", calculatedTotalPages);
 
-        setTotalPages(calculatedTotalPages);
+        dispatch(setTotalPages(calculatedTotalPages));
       } catch (error) {
         console.error("Error fetching data:", error);
-        setProducts([]);
-        setError("Failed to fetch products. Please try again later.");
+        dispatch(setProducts([]));
+        dispatch(setError("Failed to fetch products. Please try again later."));
       }
     };
 
     fetchProducts();
-  }, [currentPage, limit]);
+  }, [currentPage, limit, dispatch]);
 
   const handleNextPage = () => {
     const nextPage = currentPage + 1;
@@ -104,8 +105,8 @@ const StocksPrices = () => {
                   <tr key={product._id}>
                     <td className={tableStyle}>
                       <img
-                        className="w-[7rem] bg-white rounded-full"
-                        src={product.images}
+                        className="w-[6rem] h-[5rem] bg-white rounded-xl"
+                        src={`http://localhost:8000/images/products/thumbnails/${product.thumbnail}`}
                         alt={`${product.name} Image`}
                       />
                     </td>
