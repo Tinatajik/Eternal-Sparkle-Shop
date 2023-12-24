@@ -33,14 +33,14 @@ const Sidebar = () => {
     }
   };
   return (
-    <div className="bg-[#0D3B66] text-[#EE964B] z-20 text-lg w-1/2 h-screen md:w-1/6 lg:w-1/6 border-r border-side-nav hidden md:block lg:block">
+    <div className="bg-[#EEE8E3] text-[#30373E] z-20 text-lg w-1/2 h-screen md:w-1/6 lg:w-1/6 border-r border-side-nav hidden md:block lg:block">
       <ul>
         {Array.isArray(categories) && categories.length > 0 ? (
           categories.map((category) => (
             <li
               key={category._id}
-              className={`w-full h-full py-3 px-4 border-b border-light-border ${
-                selectedCategoryId === category._id ? "bg-[#F4D35E]" : ""
+              className={`w-full h-full py-3 px-4 border-b border-[#30373E] ${
+                selectedCategoryId === category._id ? "bg-[#D6B59F]" : ""
               }`}
             >
               <Link

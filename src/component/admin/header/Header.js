@@ -6,11 +6,11 @@ export default function Header() {
   return (
     <div className="mx-auto ">
       <div className="min-h-screen flex flex-col">
-        <header className="bg-[#0D3B66] text-[#EE964B] p-3">
+        <header className="bg-[#EEE8E3] text-[#30373E] p-3">
           <div className="flex justify-between items-center">
             <div className="p-1 mx-3 inline-flex">
               <Link to={HomeAdmin}>
-                <img src="/Image/logo.jpg" className="w-24" />
+                <img src="/Image/logo.png" className="w-24" />
               </Link>
               <i className="fas fa-bars  text-white" />
             </div>

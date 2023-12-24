@@ -6,7 +6,7 @@ export default function ProductRow({
 }) {
   const imagePath = `http://localhost:8000/images/products/thumbnails/${product.thumbnail}`;
   const tableStyle =
-    "border-2 border-[#F95738] text-[#0D3B66] text-md px-3 py-1";
+    "border-2 border-[#D6B59F] text-[#30373E] text-md px-3 py-1";
   return (
     <tr key={product._id}>
       <td className={tableStyle}>
@@ -22,13 +22,13 @@ export default function ProductRow({
         <div className="flex gap-3 font-bold">
           <button
             onClick={() => handleEditProductClick(product)}
-            className="px-2 py-1 bg-[#F4D35E] text-[#EE964B] rounded-lg"
+            className="px-2 py-1 bg-[#D6B59F] text-[#30373E] rounded-lg"
           >
             Edit
           </button>
           <button
             onClick={() => handleDeleteClick(product)}
-            className="px-2 py-1 bg-[#EE964B] text-[#F4D35E] rounded-lg"
+            className="px-2 py-1 bg-[#D6B59F] text-[#30373E] rounded-lg"
           >
             Delete
           </button>

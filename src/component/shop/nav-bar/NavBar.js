@@ -31,7 +31,7 @@ export default function NavBar() {
   };
   return (
     <>
-      <div className="flex justify-center mt-4 py-5 gap-7 bg-[#0D3B66] text-[#F4D35E] relative">
+      <div className="flex justify-center mt-4 py-5 gap-7 bg-[#EEE8E3] text-[#0D3B66] relative">
         <div
           className="ml-20 cursor-pointer hover:text-[#F95738]"
           onMouseEnter={handleShopHoverEnter}

@@ -63,16 +63,16 @@ export default function Home() {
         src="https://www.stoneandstrand.com/cdn/shop/files/Ring_Stack_Website_Banner_1440x.png?v=1698953067"
         alt="Banner"
       />
-      <div className="absolute mt-[-10rem] right-28 flex flex-col justify-center items-center gap-5 text-[#F4D35E]  font-bold text-xl">
-        <p className=" ">ALWAYS SEEKING THE RARE & BEAUTIFUL</p>
+      <div className="absolute mt-[-10rem] right-28 flex flex-col justify-center items-center gap-5 text-[#30373E]  font-bold text-xl">
+        <p className="text-[#D6B59F] ">ALWAYS SEEKING THE RARE & BEAUTIFUL</p>
         <Link to={`/categories/657080a21f0ed54c5a12f13e`}>
-          <button className="bg-[#0D3B66] w-full px-5 py-2 rounded-lg">
+          <button className="bg-[#D6B59F] w-full px-5 py-2 rounded-lg">
             Shop Now
           </button>
         </Link>
       </div>
       <div className="flex flex-col justify-center items-center mt-5 w-full">
-        <h2 className="text-4xl text-[#F95738]">Shop by Category</h2>
+        <h2 className="text-4xl text-[#30373E]">Shop by Category</h2>
         <div className="flex flex-col gap-3 ml-4">
           {Array.isArray(categories) && categories.length > 0 ? (
             categories.map((category) => (
@@ -91,8 +91,8 @@ export default function Home() {
           )}
         </div>
       </div>
-      <div className="w-full bg-[#0D3B66] flex justify-center items-center mt-5">
-        <p className="w-[40%]  text-[#F4D35E] text-lg p-6">
+      <div className="w-full bg-[#EEE8E3] flex justify-center items-center mt-5">
+        <p className="w-[40%]  text-[#30373E] text-lg p-6">
           They say you should always ask someone about their values on a first
           date, so here are ours. We make our pieces at the same places other
           premium brands do, so you're getting that high-level quality — but

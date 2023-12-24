@@ -11,7 +11,7 @@ import {
   setError,
 } from "../../../redux/admin/slices/CategorySlice";
 
-const tableStyle = "border-2 border-[#F95738] text-[#0D3B66] text-md px-3 py-1";
+const tableStyle = "border-2 border-[#D6B59F] text-[#30373E] text-md px-3 py-1";
 
 const Categories = () => {
   const dispatch = useDispatch();
@@ -90,7 +90,7 @@ const Categories = () => {
       <Header />
       <div className="absolute top-10 w-full">
         <div className="flex justify-end mt-10">
-          <button className="bg-[#F95738] text-[#0D3B66] rounded-lg text-lg px-3 py-2 font-bold absolute right-24 top-20">
+          <button className="bg-[#D6B59F] text-[#30373E] rounded-lg text-lg px-3 py-2 font-bold absolute right-24 top-20">
             Add Category
           </button>
         </div>
@@ -99,7 +99,7 @@ const Categories = () => {
             <p className="text-red-500 text-3xl">{error}</p>
           ) : (
             <>
-              <table className="border-collapse border-2 border-[#F95738] text-[#0D3B66] ">
+              <table className="border-collapse border-2 border-[#D6B59F] text-[#30373E]">
                 <tr className={tableStyle}>
                   <th className={tableStyle}>Category</th>
                   <th className={tableStyle}>Date</th>

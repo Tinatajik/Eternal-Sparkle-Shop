@@ -18,7 +18,7 @@ import {
 } from "../../../redux/admin/slices/ProductsSlice";
 import ProductRow from "./ProductRow";
 
-const tableStyle = "border-2 border-[#F95738] text-[#0D3B66] text-md px-3 py-1";
+const tableStyle = "border-2 border-[#D6B59F] text-[#30373E] text-md px-3 py-1";
 
 const Products = () => {
   const dispatch = useDispatch();
@@ -279,7 +279,7 @@ const Products = () => {
         <div className="flex justify-end mt-10">
           <button
             onClick={handleAddProductClick}
-            className="bg-[#F95738] text-[#0D3B66] rounded-lg text-lg px-3 py-2 font-bold absolute right-24 top-20"
+            className="bg-[#D6B59F] text-[#30373E] rounded-lg text-lg px-3 py-2 font-bold absolute right-24 top-20"
           >
             Add Product
           </button>
@@ -289,7 +289,7 @@ const Products = () => {
             <p className="text-red-500 text-3xl">{error}</p>
           ) : (
             <>
-              <table className="border-collapse border-2 border-[#F95738] text-[#0D3B66] ">
+              <table className="border-collapse border-2 border-[#D6B59F] text-[#30373E] ">
                 <tr className={tableStyle}>
                   <th className={tableStyle}>Image</th>
                   <th className={tableStyle}>Product Name</th>

@@ -14,12 +14,12 @@ export default function SideBar() {
 
   return (
     <>
-      <aside className="bg-[#0D3B66] text-[#EE964B] z-20 text-lg w-1/2 md:w-1/6 lg:w-1/6 border-r border-side-nav hidden md:block lg:block">
+      <aside className="bg-[#EEE8E3] text-[#30373E] z-20 text-lg w-1/2 md:w-1/6 lg:w-1/6 border-r border-side-nav hidden md:block lg:block">
         <ul className="flex flex-col">
           <Link to={HomeAdmin}>
             <li
-              className={`w-full h-full py-3 px-4 border-b border-light-border ${
-                location.pathname === HomeAdmin ? "bg-[#F4D35E]" : ""
+              className={`w-full h-full py-3 px-4 border-b border-[#30373E] ${
+                location.pathname === HomeAdmin ? "bg-[#D6B59F]" : ""
               }`}
             >
               <button> Dashboard</button>
@@ -27,8 +27,8 @@ export default function SideBar() {
           </Link>
           <Link to={ProductAdmin}>
             <li
-              className={`w-full h-full py-3 px-4 border-b border-light-border ${
-                location.pathname === ProductAdmin ? "bg-[#F4D35E]" : ""
+              className={`w-full h-full py-3 px-4 border-b border-[#30373E] ${
+                location.pathname === ProductAdmin ? "bg-[#D6B59F]" : ""
               }`}
             >
               <button>Product</button>
@@ -36,8 +36,8 @@ export default function SideBar() {
           </Link>
           <Link to={CategoriesAdmin}>
             <li
-              className={`w-full h-full py-3 px-4 border-b border-light-border ${
-                location.pathname === CategoriesAdmin ? "bg-[#F4D35E]" : ""
+              className={`w-full h-full py-3 px-4 border-b border-[#30373E] ${
+                location.pathname === CategoriesAdmin ? "bg-[#D6B59F]" : ""
               }`}
             >
               <button>Categories</button>
@@ -45,8 +45,8 @@ export default function SideBar() {
           </Link>
           <Link to={SubCategoriesAdmin}>
             <li
-              className={`w-full h-full py-3 px-4 border-b border-light-border ${
-                location.pathname === SubCategoriesAdmin ? "bg-[#F4D35E]" : ""
+              className={`w-full h-full py-3 px-4 border-b border-[#30373E] ${
+                location.pathname === SubCategoriesAdmin ? "bg-[#D6B59F]" : ""
               }`}
             >
               <button>Sub-Categories</button>
@@ -54,8 +54,8 @@ export default function SideBar() {
           </Link>
           <Link to={Stock}>
             <li
-              className={`w-full h-full py-3 px-4 border-b border-light-border ${
-                location.pathname === Stock ? "bg-[#F4D35E]" : ""
+              className={`w-full h-full py-3 px-4 border-b border-[#30373E] ${
+                location.pathname === Stock ? "bg-[#D6B59F]" : ""
               }`}
             >
               <button>Stocks-Prices</button>
@@ -63,8 +63,8 @@ export default function SideBar() {
           </Link>
           <Link to={Orders}>
             <li
-              className={`w-full h-full py-3 px-4 border-b border-300-border ${
-                location.pathname === Orders ? "bg-[#F4D35E]" : ""
+              className={`w-full h-full py-3 px-4 border-b border-[#30373E] ${
+                location.pathname === Orders ? "bg-[#D6B59F]" : ""
               }`}
             >
               <button>Orders</button>
@@ -72,8 +72,8 @@ export default function SideBar() {
           </Link>
           <Link to={User}>
             <li
-              className={`w-full h-full py-3 px-4 ${
-                location.pathname === User ? "bg-[#F4D35E]" : ""
+              className={`w-full h-full py-3 px-4 border-b border-[#30373E] ${
+                location.pathname === User ? "bg-[#D6B59F]" : ""
               }`}
             >
               <button>Users</button>
@@ -81,7 +81,7 @@ export default function SideBar() {
           </Link>
         </ul>
         <Link to="/">
-          <div className="absolute bottom-20 left-12 text-xl text-[#FAF0CA]">
+          <div className="absolute bottom-16 left-12 text-xl text-[#30373E]">
             <p>Go to Shop</p>
             <img
               className="ml-8 mt-3"

@@ -11,7 +11,7 @@ import {
   setError,
 } from "../../../redux/admin/slices/SubCategorySlice";
 
-const tableStyle = "border-2 border-[#F95738] text-[#0D3B66] text-md px-3 py-1";
+const tableStyle = "border-2 border-[#D6B59F] text-[#30373E] text-md px-3 py-1";
 
 const SubCategories = () => {
   const dispatch = useDispatch();
@@ -125,7 +125,7 @@ const SubCategories = () => {
       <Header />
       <div className="absolute top-10 w-full">
         <div className="flex justify-end mt-10">
-          <button className="bg-[#F95738] text-[#0D3B66] rounded-lg text-lg px-3 py-2 font-bold absolute right-24 top-20">
+          <button className="bg-[#D6B59F] text-[#30373E] rounded-lg text-lg px-3 py-2 font-bold absolute right-24 top-20">
             Add Subcategory
           </button>
         </div>
@@ -134,7 +134,7 @@ const SubCategories = () => {
             <p className="text-red-500 text-3xl">{error}</p>
           ) : (
             <>
-              <table className="border-collapse border-2 border-[#F95738] text-[#0D3B66] ">
+              <table className="border-collapse border-2 border-[#D6B59F] text-[#30373E]">
                 <thead>
                   <tr className={tableStyle}>
                     <th className={tableStyle}>Subcategory</th>

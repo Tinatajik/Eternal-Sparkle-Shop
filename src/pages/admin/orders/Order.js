@@ -10,7 +10,7 @@ import {
   setCurrentPage,
 } from "../../../redux/admin/slices/OrderSlice";
 
-const tableStyle = "border-2 border-[#F95738] text-[#0D3B66] text-md px-3 py-1";
+const tableStyle = "border-2 border-[#D6B59F] text-[#30373E] text-md px-3 py-1";
 
 export default function Order() {
   const dispatch = useDispatch();
@@ -136,7 +136,7 @@ export default function Order() {
           </div>
         </div>
         <div className="flex justify-center items-center mt-16">
-          <table className="border-collapse border-2 border-[#F95738] text-[#0D3B66] ">
+          <table className="border-collapse border-2 border-[#D6B59F] text-[#30373E]">
             <thead>
               <tr className={tableStyle}>
                 <th className={tableStyle}>User Name</th>

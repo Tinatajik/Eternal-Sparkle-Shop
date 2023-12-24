@@ -29,7 +29,7 @@ export default function Header() {
         {isModalOpen && <SearchModal onClose={closeModal} />}
         <div className="w-[15%] ml-20">
           <Link to="/">
-            <img src="./Image/logo.jpg" />
+            <img src="./Image/logo.png" />
           </Link>
         </div>
 

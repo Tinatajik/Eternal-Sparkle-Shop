@@ -5,7 +5,7 @@ export default function Checkout() {
   };
   return (
     <>
-      <div className="flex flex-col gap-5 items-center mt-10 font-bold text-[#0D3B66]">
+      <div className="flex flex-col gap-5 items-center mt-10 font-bold text-[#30373E]">
         <h2 className="text-2xl mb-4">Finalize the purchase</h2>
         <div className="flex gap-4">
           <div className="flex flex-col gap-1">
@@ -31,7 +31,7 @@ export default function Checkout() {
           <label>Delivery Date :</label>
           <input type="date" className={InputButton} />
         </div>
-        <div className="bg-[#EE964B]  text-[#0D3B66] text-xl font-bold py-2 px-5 rounded-lg mt-10">
+        <div className="bg-[#D6B59F] text-[#30373E] text-xl font-bold py-2 px-5 rounded-lg mt-10">
           <button onClick={handlePaymentClick}>Pay</button>
         </div>
       </div>
@@ -39,4 +39,4 @@ export default function Checkout() {
   );
 }
 
-const InputButton = "bg-[#F4D35E] px-2 py-1 outline-none rounded-md";
+const InputButton = "bg-[#EEE8E3] px-2 py-1 outline-none rounded-md";

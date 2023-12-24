@@ -72,34 +72,34 @@ const Product = () => {
         src={`http://localhost:8000/images/products/thumbnails/${product?.thumbnail}`}
         alt={product?.name}
       />
-      <div className="flex flex-col gap-4 text-lg text-[#F95738] font-bold mt-6">
+      <div className="flex flex-col gap-4 text-lg  text-[#30373E] font-bold mt-6">
         <h2 className="text-2xl">{product?.name}</h2>
         <p>Category: {product?.category?.name}</p>
         <p>Subcategory: {product?.subcategory?.name}</p>
         <p>{product?.brand}</p>
         <p>{`${product?.price} $`}</p>
         {product?.quantity > 0 ? (
-          <div className="flex gap-4 bg-[#0D3B66] w-1/2 justify-center px-3 py-1 mt-4 rounded-lg text-[#F4D35E] ml-9">
-            <button onClick={handleIncrease}>+</button>
+          <div className="flex gap-4 bg-[#D6B59F] w-1/2 justify-center px-3 py-1 mt-4 rounded-lg text-[#30373E] ml-9">
+            <button onClick={handleDecrease}>-</button>
             <input
               type="text"
               value={quantity}
               onChange={(e) => dispatch(setQuantity(Number(e.target.value)))}
-              className="w-1/4 bg-[#0D3B66]"
+              className="w-1/6 bg-[#D6B59F]"
             />
-            <button onClick={handleDecrease}>-</button>
+            <button onClick={handleIncrease}>+</button>
           </div>
         ) : (
-          <p className="text-[#F4D35E]">No inventory available</p>
+          <p className="text-[#D6B59F]">No inventory available</p>
         )}
         {product?.quantity > 0 && (
-          <button className="bg-[#F4D35E] text-[#0D3B66] mt-5 rounded-lg text-lg font-bold py-1">
+          <button className="bg-[#D6B59F] text-[#30373E] mt-5 rounded-lg text-lg font-bold py-1">
             Add To Cart
           </button>
         )}
       </div>
       <div
-        className="text-[#0D3B66] font-bold ml-10 p-5 w-1/2 mt-10"
+        className="text-[#30373E] font-bold ml-10 p-5 w-1/2 mt-10"
         dangerouslySetInnerHTML={{ __html: product?.description }}
       ></div>
     </div>

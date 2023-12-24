@@ -59,11 +59,11 @@ const CategoryPage = () => {
     <div>
       <Sidebar />
       <div className="absolute  w-full ml-[20rem] top-48 ">
-        <div className="grid grid-cols-3 gap-4 w-3/4 ">
+        <div className="grid grid-cols-3  gap-4 w-3/4 ">
           {Array.isArray(products) && products.length > 0 ? (
             products.map((product) => (
               <Link to={`/productPage/${product._id}`}>
-                <div key={product._id} className="flex">
+                <div key={product._id} className="flex border ">
                   <img
                     className="w-40 h-[10rem] rounded-lg"
                     src={`http://localhost:8000/images/products/thumbnails/${product.thumbnail}`}

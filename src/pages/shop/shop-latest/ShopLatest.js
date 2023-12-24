@@ -2,7 +2,7 @@ export default function ShopLatest() {
   return (
     <>
       <div className="flex justify-center mt-5 gap-7">
-        <h3 className="bg-[#F4D35E] text-[#F95738] w-[15%] text-4xl text-center py-14 ">
+        <h3 className="bg-[#EEE8E3] text-[#D6B59F] w-[15%] text-4xl text-center py-14 ">
           Shop the latest from Instagram <br></br> Follow us
         </h3>
         <img

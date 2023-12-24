@@ -3,7 +3,7 @@ import React from "react";
 const NavModalAbout = ({ onMouseEnterAbout, onMouseLeaveAbout }) => {
   return (
     <div
-      className=" absolute top-[100%] z-20 bg-[#EE964B] text-[#0D3B66] font-bold w-1/7 px-5 py-2 text-center"
+      className=" absolute top-[100%] z-20 bg-[#D6B59F] text-[#0D3B66] font-bold w-1/7 px-5 py-2 text-center"
       onMouseEnter={onMouseEnterAbout}
       onMouseLeave={onMouseLeaveAbout}
     >

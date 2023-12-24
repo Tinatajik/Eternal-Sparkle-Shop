@@ -20,7 +20,7 @@ const Category = ({ category, products }) => (
             <Link to={`/productPage/${product._id}`}>
               <div
                 key={product._id}
-                className="flex flex-col justify-center items-center w-[10rem] gap-4 text-[#EE964B] text-lg font-bold text-center"
+                className="flex flex-col justify-center items-center w-[10rem] gap-4 text-[#30373E] text-lg font-bold text-center border border-2"
               >
                 <img
                   className="w-full h-[10rem] rounded-lg"
