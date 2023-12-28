@@ -1,10 +1,34 @@
-import { Link } from "react-router-dom";
-import { CheckoutPage } from "../../../router/path-route/PathRoute";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  removeFromCart,
+  increaseQuantity,
+  decreaseQuantity,
+  addToCart,
+} from "../../../redux/shop/cartSlice";
 import { ProductCart } from "./ProductCart";
+import { CheckoutPage } from "../../../router/path-route/PathRoute";
+import { Link } from "react-router-dom";
 
 const tableStyle = "border-2 border-[#D6B59F] text-[#30373E] text-md px-3 py-1";
 
-export default function Cart() {
+const Cart = () => {
+  const cartItems = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    localStorage.setItem("cartProducts", JSON.stringify(cartItems));
+  }, [cartItems]);
+
+  const calculateSubtotal = () => {
+    return cartItems.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
+  };
+
+  const isCartEmpty = cartItems.length === 0;
+
   return (
     <>
       <div className="w-full">
@@ -20,32 +44,40 @@ export default function Cart() {
               </tr>
             </thead>
             <tbody>
-              <ProductCart
-                id="657f0c883a47a128e4468a27"
-                name="LuLu"
-                price="200$"
-                imageUrl="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfGjPyeQl281wzhqN2dUlMGOZnv7TaOMoHjA&usqp=CAU"
-              />
+              {cartItems.map((item) => (
+                <ProductCart
+                  key={item._id}
+                  id={item._id}
+                  name={item.name}
+                  price={item.price}
+                  imageUrl={item.thumbnail}
+                  quantity={item.quantity}
+                  onRemove={() => dispatch(removeFromCart(item))}
+                  onIncrease={() => dispatch(increaseQuantity(item))}
+                  onDecrease={() => dispatch(decreaseQuantity(item))}
+                />
+              ))}
             </tbody>
           </table>
         </div>
         <div className=" flex flex-col justify-center items-center mt-10 bg-[#F6F4F2] text-[#30373E] font-bold">
           <div className="flex justify-between w-[30%]">
             <p>SUBTOTAL</p>
-            <p>50.000 $</p>
+            <p>{`${calculateSubtotal()} $`}</p>
           </div>
           <Link to={CheckoutPage}>
-            <button className="mt-14 mb-7 font-extrabold w-full px-32 bg-[#D6B59F] text-[#30373E]  py-1 rounded-lg">
+            <button
+              disabled={isCartEmpty}
+              className={`mt-14 mb-7 font-extrabold w-full px-32 bg-[#D6B59F] text-[#30373E]  py-1 rounded-lg
+              ${isCartEmpty && "opacity-50 cursor-not-allowed"} `}
+            >
               Checkout
             </button>
           </Link>
         </div>
-        <div className="flex justify-center items-center mt-2">
-          <button className="mx-2">Prev</button>
-          <span>{/* Page {currentPage} of {totalPages} */}</span>
-          <button className="mx-2">Next</button>
-        </div>
       </div>
     </>
   );
-}
+};
+
+export default Cart;
