@@ -23,9 +23,18 @@ import {
   Orders,
   User,
   ProductAdmin,
+  CartPage,
+  CategoryShop,
+  SubcategoryShop,
+  PaySucess,
+  PayFail,
 } from "./path-route/PathRoute";
 import Products from "../pages/admin/product/Product";
-
+import Cart from "../pages/shop/cart/Cart";
+import CategoryPage from "../pages/shop/categoryPage/CategoryPage";
+import SubcategoryPage from "../pages/shop/subcategory/Subcategory";
+import PaymentResaultSuccessful from "../pages/paymentResault/PaymentResaultSuccessful";
+import PaymentResaultFailed from "../pages/paymentResault/PaymentResaultFailed";
 export default function Router() {
   return (
     <>
@@ -35,8 +44,13 @@ export default function Router() {
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
               <Route path={ProductPage} element={<Product />} />
+              <Route path={CategoryShop} element={<CategoryPage />} />
+              <Route path={SubcategoryShop} element={<SubcategoryPage />} />
+              <Route path={CartPage} element={<Cart />} />
               <Route path={CheckoutPage} element={<Checkout />} />
               <Route path={LoginAdmin} element={<Login />} />
+              <Route path={PaySucess} element={<PaymentResaultSuccessful />} />
+              <Route path={PayFail} element={<PaymentResaultFailed />} />
             </Route>
             <Route>
               <Route path={HomeAdmin} element={<AdminHome />} />

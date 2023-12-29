@@ -1,79 +1,42 @@
+import React from "react";
 import { Link } from "react-router-dom";
 import { ProductPage } from "../../../router/path-route/PathRoute";
-export default function Category() {
-  return (
-    <>
-      <div className="flex justify-center mt-5">
-        <h2 className="text-4xl text-[#F95738]">THE ANTIQUE DIAMOND SHAPES</h2>
-      </div>
-      <div className="mt-5 px-8 text-xl font-bold flex flex-col gap-7 text-[#EE964B]">
-        <div className="flex flex-col gap-3">
-          <p>OLD EUROPEAN CUT</p>
-          <div className="flex gap-5">
-            <img
-              className="w-[15%]"
-              src="https://andriabarbone.com/cdn/shop/files/European_cut_36be2483-e1a4-4b58-94bf-2768dd231f5a_300x.jpg?v=1692297610"
-            />
-            <Link to={ProductPage}>
-              <div className="flex gap-5">
+
+const Category = ({ category, products }) => (
+  <div className="flex flex-col gap-3">
+    <p className="text-[#0D3B66] text-xl font-bold ml-10">{category.name}</p>
+    <div className="flex gap-5">
+      <Link to={`/categories/${category._id}`}>
+        <img
+          className="w-[12rem] h-[15rem] mb-20 rounded-lg"
+          src={category.icon}
+          alt={category.name}
+        />
+      </Link>
+
+      <div className="flex gap-5 justify-center">
+        {Array.isArray(products) &&
+          products.slice(0, 6).map((product) => (
+            <Link to={`/productPage/${product._id}`}>
+              <div
+                key={product._id}
+                className="flex flex-col justify-center items-center w-[10rem] gap-4 text-[#30373E] text-lg font-bold text-center border border-2"
+              >
                 <img
-                  className="w-[18%]"
-                  src="https://andriabarbone.com/cdn/shop/files/AB_jen_2.95_front-web_460x.jpg?v=1699909569"
+                  className="w-full h-[10rem] rounded-lg"
+                  src={`http://localhost:8000/images/products/thumbnails/${product.thumbnail}`}
+                  alt={product.name}
                 />
-                <img
-                  className="w-[18%]"
-                  src="https://andriabarbone.com/cdn/shop/files/AB_candy_front-web_460x.jpg?v=1699898793"
-                />
-                <img
-                  className="w-[18%]"
-                  src="https://andriabarbone.com/cdn/shop/files/AB_jen_2.15_front-web_460x.jpg?v=1699648422"
-                />
-                <img
-                  className="w-[18%]"
-                  src="https://andriabarbone.com/cdn/shop/files/VB_kendra_2.13_front-web_460x.jpg?v=1699646981"
-                />
-                <img
-                  className="w-[18%]"
-                  src="https://andriabarbone.com/cdn/shop/files/VB_eleni_1.29_front-web_460x.jpg?v=1699384307"
-                />
+                <div className="flex flex-col gap-2">
+                  <p>{product.name}</p>
+                  <p className="">{product.price} $</p>
+                </div>
               </div>
             </Link>
-          </div>
-        </div>
-        <div className="flex flex-col gap-3">
-          <p>OLD MINE CUT</p>
-          <div className="flex gap-5">
-            <img
-              className="w-[15%]"
-              src="https://andriabarbone.com/cdn/shop/files/Mine_cut_bdf37bf2-24b3-4b59-a1f7-8c9d647cdc22_300x.jpg?v=1692297405"
-            />
-            <Link to={ProductPage}>
-              <div className="flex gap-5">
-                <img
-                  className="w-[18%]"
-                  src="https://andriabarbone.com/cdn/shop/products/VB_camille_5.52_front-web_460x.jpg?v=1673288796"
-                />
-                <img
-                  className="w-[18%]"
-                  src="https://andriabarbone.com/cdn/shop/products/VB_allie_1.47_front-web_460x.jpg?v=1678909570"
-                />
-                <img
-                  className="w-[18%]"
-                  src="https://andriabarbone.com/cdn/shop/products/VB_leilani_front-web_460x.jpg?v=1679335166"
-                />
-                <img
-                  className="w-[18%]"
-                  src="https://andriabarbone.com/cdn/shop/products/VB_maivet_5.33_front-web_460x.jpg?v=1678901159"
-                />
-                <img
-                  className="w-[18%]"
-                  src="https://andriabarbone.com/cdn/shop/products/VB_caria_front-web_460x.jpg?v=1680201664"
-                />
-              </div>
-            </Link>
-          </div>
-        </div>
+          ))}
       </div>
-    </>
-  );
-}
+    </div>
+  </div>
+);
+
+export default Category;

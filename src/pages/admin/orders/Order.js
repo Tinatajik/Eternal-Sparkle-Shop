@@ -1,20 +1,37 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { useNavigate, useLocation } from "react-router-dom";
 import Header from "../../../component/admin/header/Header";
+import { useNavigate, useLocation } from "react-router-dom";
+import {
+  setOrders,
+  setSelectedStatus,
+  setTotalPages,
+  setCurrentPage,
+} from "../../../redux/admin/slices/OrderSlice";
+import OrderModal from "../../../modal/admin/order/OrderModal";
 
-const tableStyle = "border-2 border-[#F95738] text-[#0D3B66] text-md px-3 py-1";
+const tableStyle = "border-2 border-[#D6B59F] text-[#30373E] text-md px-3 py-1";
 
 export default function Order() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const queryParams = new URLSearchParams(location.search);
-  const currentPage = parseInt(queryParams.get("page")) || 1; // Provide a default value of 1
+  const { orders, selectedStatus, totalPages, currentPage } = useSelector(
+    (state) => state.order
+  );
 
-  const [orders, setOrders] = useState([]);
-  const [selectedStatus, setSelectedStatus] = useState(true);
-  const [totalPages, setTotalPages] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [productDetails, setProductDetails] = useState([]);
+  console.log(productDetails);
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const currentPage = parseInt(queryParams.get("page")) || 1;
+
+    dispatch(setCurrentPage(currentPage));
+  }, [location.search, dispatch]);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -43,7 +60,12 @@ export default function Order() {
                   const username = userResponse.data.data.user.username;
                   console.log("Username:", username);
 
-                  return { ...order, username };
+                  return {
+                    ...order,
+                    username,
+                    address: userResponse.data.data.user.address,
+                    phoneNumber: userResponse.data.data.user.phoneNumber,
+                  };
                 } else {
                   console.error(
                     "Username not found in user response:",
@@ -63,10 +85,11 @@ export default function Order() {
 
           console.log("Orders with Usernames:", ordersWithUsernames);
 
-          setOrders(ordersWithUsernames);
+          const products = await fetchProductDetails();
+          setProductDetails(products);
 
-          // Set total pages
-          setTotalPages(response.data.total_pages);
+          dispatch(setOrders(ordersWithUsernames));
+          dispatch(setTotalPages(response.data.total_pages));
         } else {
           console.error(
             'Invalid response format. Expected an array under the "data.orders" property or "total_pages" in the response.'
@@ -78,10 +101,10 @@ export default function Order() {
     };
 
     fetchOrders();
-  }, [selectedStatus, currentPage]);
+  }, [selectedStatus, currentPage, dispatch]);
 
   const handleStatusChange = (status) => {
-    setSelectedStatus(status);
+    dispatch(setSelectedStatus(status));
     navigate(`?page=1`);
   };
 
@@ -93,6 +116,45 @@ export default function Order() {
   const handlePrevPage = () => {
     const prevPage = Math.max(currentPage - 1, 1);
     navigate(`?page=${prevPage}`);
+  };
+
+  const fetchProductDetails = async () => {
+    try {
+      let allProducts = [];
+      let currentPage = 1;
+      let totalPages = 1;
+      while (currentPage <= totalPages) {
+        const productResponse = await axios.get(
+          `http://localhost:8000/api/products?page=${currentPage}`
+        );
+
+        console.log(
+          `Product API Response - Page ${currentPage}:`,
+          productResponse.data
+        );
+
+        const products = productResponse.data?.data?.products || [];
+        allProducts = [...allProducts, ...products];
+
+        totalPages = productResponse.data?.total_pages || 1;
+
+        currentPage++;
+      }
+
+      return allProducts;
+    } catch (error) {
+      console.error("Error fetching product details:", error);
+      return [];
+    }
+  };
+
+  const openModal = (order) => {
+    setSelectedOrder(order);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -126,7 +188,7 @@ export default function Order() {
           </div>
         </div>
         <div className="flex justify-center items-center mt-16">
-          <table className="border-collapse border-2 border-[#F95738] text-[#0D3B66] ">
+          <table className="border-collapse border-2 border-[#D6B59F] text-[#30373E]">
             <thead>
               <tr className={tableStyle}>
                 <th className={tableStyle}>User Name</th>
@@ -149,7 +211,9 @@ export default function Order() {
                       })}
                     </td>
                     <td className={tableStyle}>
-                      <button>Check the order</button>
+                      <button onClick={() => openModal(order)}>
+                        Check the order
+                      </button>
                     </td>
                   </tr>
                 ))
@@ -183,6 +247,19 @@ export default function Order() {
           </button>
         </div>
       </div>
+
+      {selectedOrder && (
+        <OrderModal
+          isOpen={isModalOpen}
+          closeModal={closeModal}
+          orderDetails={{
+            id: selectedOrder._id,
+            ...selectedOrder,
+            deliveryDate: selectedOrder.deliveryDate,
+          }}
+          productDetails={productDetails}
+        />
+      )}
     </>
   );
 }

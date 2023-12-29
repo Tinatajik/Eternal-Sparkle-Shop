@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { loginSuccess } from "../../../redux/admin/AuthSlice";
+import { loginSuccess } from "../../../redux/admin/slices/AuthSlice";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -63,7 +63,7 @@ const LoginForm = () => {
     <>
       <ToastContainer />
       <div className="flex flex-col justify-center items-center gap-8 mb-12 mt-4 ml-12">
-        <div className="w-[30%] flex flex-col mt-12 gap-3 text-[#0D3B66] text-xl font-bold ">
+        <div className="w-[30%] flex flex-col mt-12 gap-3 text-[#30373E] text-xl font-bold ">
           <p className="text-center mb-6">
             Welcome back! Log into your account below to continue.
           </p>
@@ -79,7 +79,7 @@ const LoginForm = () => {
                   <Field
                     type="text"
                     name="username"
-                    className="p-2 bg-[#F4D35E] outline-none rounded-md"
+                    className="p-2 bg-[#EEE8E3] outline-none rounded-md"
                   />
                   <ErrorMessage
                     name="username"
@@ -92,7 +92,7 @@ const LoginForm = () => {
                   <Field
                     type={passwordVisible ? "text" : "password"}
                     name="password"
-                    className="p-2 bg-[#F4D35E] outline-none rounded-md"
+                    className="p-2 bg-[#EEE8E3] outline-none rounded-md"
                   />
                   <img
                     className="absolute ml-[21rem] mt-10 cursor-pointer"
@@ -114,7 +114,7 @@ const LoginForm = () => {
                 </div>
                 <button
                   type="submit"
-                  className="bg-[#EE964B]  text-[#0D3B66] text-xl font-bold flex justify-center py-2 px-5 rounded-lg w-1/2 mt-8 ml-[6rem]"
+                  className="bg-[#D6B59F]   text-[#30373E] text-xl font-bold flex justify-center py-2 px-5 rounded-lg w-1/2 mt-8 ml-[6rem]"
                 >
                   LOG IN
                 </button>

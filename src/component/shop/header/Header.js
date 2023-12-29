@@ -1,20 +1,13 @@
-import { useState, useEffect } from "react";
+import React from "react";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { LoginAdmin } from "../../../router/path-route/PathRoute";
-import Cart from "../../../pages/shop/cart/Cart";
+import { CartPage, LoginAdmin } from "../../../router/path-route/PathRoute";
 import SearchModal from "../../../modal/shop/search/Search";
-export default function Header() {
-  const [showCart, setShowCart] = useState(false);
-  const [isCheckoutPage, setIsCheckoutPage] = useState(false);
 
-  const handleCartButtonClick = () => {
-    setShowCart(true);
-  };
-  useEffect(() => {
-    setIsCheckoutPage();
-  }, []);
-
+const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const cartItems = useSelector((state) => state.cart);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -40,11 +33,11 @@ export default function Header() {
         {isModalOpen && <SearchModal onClose={closeModal} />}
         <div className="w-[15%] ml-20">
           <Link to="/">
-            <img src="./Image/logo.jpg" />
+            <img src="./Image/logo.png" />
           </Link>
         </div>
 
-        <div className="flex gap-4">
+        <div className="flex gap-4 relative">
           <Link to={LoginAdmin}>
             <img
               width="30"
@@ -53,17 +46,23 @@ export default function Header() {
               alt="gender-neutral-user"
             />
           </Link>
-          <button onClick={handleCartButtonClick}>
-            <img
-              width="32"
-              height="32"
-              src="https://img.icons8.com/pulsar-color/48/shopping-bag.png"
-              alt="shopping-bag"
-            />
-          </button>
-          {!isCheckoutPage && showCart && <Cart />}
+          <Link to={CartPage}>
+            <button className="relative">
+              <img
+                width="32"
+                height="32"
+                src="https://img.icons8.com/pulsar-color/48/shopping-bag.png"
+                alt="shopping-bag"
+              />
+              {cartItems.length > 0 && (
+                <span className="cart-badge">{cartItems.length}</span>
+              )}
+            </button>
+          </Link>
         </div>
       </div>
     </>
   );
-}
+};
+
+export default Header;
