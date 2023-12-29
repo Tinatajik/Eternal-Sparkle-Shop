@@ -64,6 +64,7 @@ const Product = () => {
     dispatch(
       addToCart({ ...product, quantity, initialQuantity: product?.quantity })
     );
+
     toast.success("Item added to cart!");
   };
 
