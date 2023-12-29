@@ -2,11 +2,15 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import {
   setProduct,
   setQuantity,
   setIsLoading,
 } from "../../../redux/shop/productShopSlice";
+import { addToCart } from "../../../redux/shop/cartSlice";
 
 const Product = () => {
   const { productId } = useParams();
@@ -56,6 +60,13 @@ const Product = () => {
     }
   };
 
+  const handleAddToCart = () => {
+    dispatch(
+      addToCart({ ...product, quantity, initialQuantity: product?.quantity })
+    );
+    toast.success("Item added to cart!");
+  };
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -93,7 +104,10 @@ const Product = () => {
           <p className="text-[#D6B59F]">No inventory available</p>
         )}
         {product?.quantity > 0 && (
-          <button className="bg-[#D6B59F] text-[#30373E] mt-5 rounded-lg text-lg font-bold py-1">
+          <button
+            onClick={handleAddToCart}
+            className="bg-[#D6B59F] text-[#30373E] mt-5 rounded-lg text-lg font-bold py-1"
+          >
             Add To Cart
           </button>
         )}
@@ -102,6 +116,7 @@ const Product = () => {
         className="text-[#30373E] font-bold ml-10 p-5 w-1/2 mt-10"
         dangerouslySetInnerHTML={{ __html: product?.description }}
       ></div>
+      <ToastContainer position="bottom-right" autoClose={3000} />
     </div>
   );
 };
