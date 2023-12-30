@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import Header from "../../../component/admin/header/Header";
@@ -10,8 +10,9 @@ import {
   setCurrentPage,
 } from "../../../redux/admin/slices/OrderSlice";
 import OrderModal from "../../../modal/admin/order/OrderModal";
-
-const tableStyle = "border-2 border-[#D6B59F] text-[#30373E] text-md px-3 py-1";
+import OrderTable from "./OrderTable";
+import Pagination from "../../../component/pagination/Pagination";
+import OrderFilter from "./OrderFilter";
 
 export default function Order() {
   const dispatch = useDispatch();
@@ -25,7 +26,7 @@ export default function Order() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [productDetails, setProductDetails] = useState([]);
-  console.log(productDetails);
+
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const currentPage = parseInt(queryParams.get("page")) || 1;
@@ -162,90 +163,20 @@ export default function Order() {
       <Header />
       <div className="absolute top-10 w-full">
         <div className="flex justify-end mt-14 mr-14">
-          <div className="flex gap-5">
-            <div className="flex gap-3 ">
-              <input
-                type="radio"
-                id="Delivered"
-                name="orderStatus"
-                value={true}
-                checked={selectedStatus === true}
-                onChange={() => handleStatusChange(true)}
-              />
-              <label htmlFor="Delivered">Delivered orders</label>
-            </div>
-            <div className="flex gap-3 ">
-              <input
-                type="radio"
-                id="Pending"
-                name="orderStatus"
-                value={false}
-                checked={selectedStatus === false}
-                onChange={() => handleStatusChange(false)}
-              />
-              <label htmlFor="Pending">Pending orders</label>
-            </div>
-          </div>
+          <OrderFilter
+            handleStatusChange={handleStatusChange}
+            selectedStatus={selectedStatus}
+          />
         </div>
         <div className="flex justify-center items-center mt-16">
-          <table className="border-collapse border-2 border-[#D6B59F] text-[#30373E]">
-            <thead>
-              <tr className={tableStyle}>
-                <th className={tableStyle}>User Name</th>
-                <th className={tableStyle}>Total Price</th>
-                <th className={tableStyle}>Order registration time</th>
-                <th className={tableStyle}></th>
-              </tr>
-            </thead>
-            <tbody>
-              {orders.length > 0 ? (
-                orders.map((order) => (
-                  <tr key={order.id}>
-                    <td className={tableStyle}>{order.username}</td>
-                    <td className={tableStyle}>{order.totalPrice} $</td>
-                    <td className={tableStyle}>
-                      {new Date(order.createdAt).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })}
-                    </td>
-                    <td className={tableStyle}>
-                      <button onClick={() => openModal(order)}>
-                        Check the order
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td className={tableStyle} colSpan="4">
-                    No orders available.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+          <OrderTable orders={orders} openModal={openModal} />
         </div>
-        <div className="flex justify-center items-center mt-2">
-          <button
-            onClick={handlePrevPage}
-            className="mx-2"
-            disabled={currentPage === 1}
-          >
-            Prev
-          </button>
-          <span>
-            Page {currentPage} of {totalPages}
-          </span>
-          <button
-            onClick={handleNextPage}
-            className="mx-2"
-            disabled={currentPage === totalPages}
-          >
-            Next
-          </button>
-        </div>
+        <Pagination
+          handlePrevPage={handlePrevPage}
+          handleNextPage={handleNextPage}
+          currentPage={currentPage}
+          totalPages={totalPages}
+        />
       </div>
 
       {selectedOrder && (

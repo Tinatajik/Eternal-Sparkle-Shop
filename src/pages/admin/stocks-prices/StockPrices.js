@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-
+import Pagination from "../../../component/pagination/Pagination";
 import Header from "../../../component/admin/header/Header";
 import {
   setProducts,
@@ -299,25 +299,12 @@ const StocksPrices = () => {
             </>
           )}
         </div>
-        <div className="flex justify-center items-center mt-2">
-          <button
-            onClick={handlePrevPage}
-            className="mx-2"
-            disabled={currentPage === 1}
-          >
-            Prev
-          </button>
-          <span>
-            Page {currentPage} of {totalPages}
-          </span>
-          <button
-            onClick={handleNextPage}
-            className="mx-2"
-            disabled={currentPage === totalPages}
-          >
-            Next
-          </button>
-        </div>
+        <Pagination
+          handlePrevPage={handlePrevPage}
+          handleNextPage={handleNextPage}
+          currentPage={currentPage}
+          totalPages={totalPages}
+        />
       </div>
     </>
   );

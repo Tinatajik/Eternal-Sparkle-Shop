@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import Header from "../../../component/admin/header/Header";
 import { useNavigate, useLocation } from "react-router-dom";
+import Header from "../../../component/admin/header/Header";
+import CategoryTable from "./CategoryTable";
+import Pagination from "../../../component/pagination/Pagination";
 import {
   setCategories,
   setCurrentPage,
@@ -10,8 +12,6 @@ import {
   setTotalPages,
   setError,
 } from "../../../redux/admin/slices/CategorySlice";
-
-const tableStyle = "border-2 border-[#D6B59F] text-[#30373E] text-md px-3 py-1";
 
 const Categories = () => {
   const dispatch = useDispatch();
@@ -99,56 +99,16 @@ const Categories = () => {
             <p className="text-red-500 text-3xl">{error}</p>
           ) : (
             <>
-              <table className="border-collapse border-2 border-[#D6B59F] text-[#30373E]">
-                <tr className={tableStyle}>
-                  <th className={tableStyle}>Category</th>
-                  <th className={tableStyle}>Date</th>
-                  <th className={tableStyle}></th>
-                </tr>
-                {categories.map((category) => (
-                  <tr key={category._id}>
-                    <td className={tableStyle}>{category.name}</td>
-                    <td className={tableStyle}>
-                      {new Date(category.createdAt).toLocaleDateString(
-                        "en-US",
-                        {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        }
-                      )}
-                    </td>
-                    <td className={tableStyle}>
-                      <div className="flex gap-3">
-                        <button>Edit</button>
-                        <button>Delete</button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </table>
+              <CategoryTable categories={categories} />
             </>
           )}
         </div>
-        <div className="flex justify-center items-center mt-2">
-          <button
-            onClick={handlePrevPage}
-            className="mx-2"
-            disabled={currentPage === 1}
-          >
-            Prev
-          </button>
-          <span>
-            Page {currentPage} of {totalPages}
-          </span>
-          <button
-            onClick={handleNextPage}
-            className="mx-2"
-            disabled={currentPage === totalPages}
-          >
-            Next
-          </button>
-        </div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          handlePrevPage={handlePrevPage}
+          handleNextPage={handleNextPage}
+        />
       </div>
     </>
   );
