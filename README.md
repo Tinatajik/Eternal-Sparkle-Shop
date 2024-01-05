@@ -1,6 +1,6 @@
 <h1 align="center">"Eternal-Sparkle-Shop" E-Commerce Website</h1>
 <h3 align="center">Maktab99 Final Project - Tina Tajik</h3>
-  
+
 </br><h2></h2></br>
 <strong>Project Phase 1 : </strong>
 </br>
@@ -52,7 +52,7 @@
 </br><h2></h2></br></br>
 
 <p>
-A complete store with home page, category page, product details page with description, comment parts, and feature display. Use interceptors to pass requests through dedicated filters, such as checking if the admin is Auth. Ability to add a product, the ability to edit products, the ability to delete products by displaying a message, order management and the ability to change the status of orders. Checkout page to enter user information to confirm purchase. Redux, axios and promises have been tried to be used as optimally as possible and only used when necessary.
+A complete store with home page, category page, product details page with description, comment parts, and feature display. Use interceptors to pass requests through dedicated filters, such as checking if the admin is Auth. Ability to add a product, the ability to edit products, the ability to delete products by displaying a message, order management and the ability to change the status of orders. Displaying weekly sales of products using charts. Checkout page to enter user information to confirm purchase. Redux, axios and promises have been tried to be used as optimally as possible and only used when necessary.
 </p>
 
 </br>
