@@ -4,6 +4,8 @@ import * as Yup from "yup";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import InputField from "./InputField";
+import CheckoutForm from "./CheckoutForm";
 
 const validationSchema = Yup.object().shape({
   firstname: Yup.string()
@@ -27,7 +29,7 @@ const validationSchema = Yup.object().shape({
     .required("Delivery Date is required"),
 });
 
-export default function Checkout() {
+const Checkout = () => {
   const [cartProducts, setCartProducts] = useState([]);
 
   const handlePaymentClick = () => {
@@ -96,153 +98,60 @@ export default function Checkout() {
   return (
     <>
       <ToastContainer />
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          formik.handleSubmit(e);
-        }}
-      >
-        <div className="flex flex-col gap-5 items-center mt-10 font-bold text-[#30373E]">
-          <h2 className="text-2xl mb-4">Finalize the purchase</h2>
-          <div className="flex gap-4">
-            <div className="flex flex-col gap-1">
-              <label>First Name :</label>
-              <input
-                type="text"
-                name="firstname"
-                value={formik.values.firstname}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className={`${InputButton} ${
-                  formik.touched.firstname && formik.errors.firstname
-                    ? "border-red-500"
-                    : ""
-                }`}
-              />
-              {formik.touched.firstname && formik.errors.firstname && (
-                <div className="text-red-500">{formik.errors.firstname}</div>
-              )}
-            </div>
-            <div className="flex flex-col gap-1">
-              <label>Last Name :</label>
-              <input
-                type="text"
-                name="lastname"
-                value={formik.values.lastname}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className={`${InputButton} ${
-                  formik.touched.lastname && formik.errors.lastname
-                    ? "border-red-500"
-                    : ""
-                }`}
-              />
-              {formik.touched.lastname && formik.errors.lastname && (
-                <div className="text-red-500">{formik.errors.lastname}</div>
-              )}
-            </div>
-          </div>
-          <div className="flex gap-4">
-            <div className="flex flex-col gap-1">
-              <label>Address :</label>
-              <input
-                type="text"
-                name="address"
-                value={formik.values.address}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className={`${InputButton} ${
-                  formik.touched.address && formik.errors.address
-                    ? "border-red-500"
-                    : ""
-                }`}
-              />
-              {formik.touched.address && formik.errors.address && (
-                <div className="text-red-500">{formik.errors.address}</div>
-              )}
-            </div>
-            <div className="flex flex-col gap-1">
-              <label>Phone Number :</label>
-              <input
-                type="text"
-                name="phoneNumber"
-                value={formik.values.phoneNumber}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className={`${InputButton} ${
-                  formik.touched.phoneNumber && formik.errors.phoneNumber
-                    ? "border-red-500"
-                    : ""
-                }`}
-              />
-              {formik.touched.phoneNumber && formik.errors.phoneNumber && (
-                <div className="text-red-500">{formik.errors.phoneNumber}</div>
-              )}
-            </div>
-          </div>
-          <div className="flex gap-4">
-            <div className="flex flex-col gap-1">
-              <label>Username :</label>
-              <input
-                type="text"
-                name="username"
-                value={formik.values.username}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className={`${InputButton} ${
-                  formik.touched.username && formik.errors.username
-                    ? "border-red-500"
-                    : ""
-                }`}
-              />
-              {formik.touched.username && formik.errors.username && (
-                <div className="text-red-500">{formik.errors.username}</div>
-              )}
-            </div>
-            <div className="flex flex-col gap-1">
-              <label>Password :</label>
-              <input
-                type="password"
-                name="password"
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className={`${InputButton} ${
-                  formik.touched.password && formik.errors.password
-                    ? "border-red-500"
-                    : ""
-                }`}
-              />
-              {formik.touched.password && formik.errors.password && (
-                <div className="text-red-500">{formik.errors.password}</div>
-              )}
-            </div>
-          </div>
-          <div className="flex flex-col gap-1 w-1/6 items-center">
-            <label>Delivery Date :</label>
-            <input
-              type="date"
-              name="deliveryDate"
-              value={formik.values.deliveryDate}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              className={`${InputButton} ${
-                formik.touched.deliveryDate && formik.errors.deliveryDate
-                  ? "border-red-500 "
-                  : ""
-              }`}
-            />
-            {formik.touched.deliveryDate && formik.errors.deliveryDate && (
-              <div className="text-red-500">{formik.errors.deliveryDate}</div>
-            )}
-          </div>
-          <div className="bg-[#D6B59F] text-[#30373E] text-xl font-bold py-2 px-5 rounded-lg mt-10">
-            <button type="submit">Pay</button>
-          </div>
+      <div className="flex flex-col gap-5 items-center mt-10 font-bold text-[#30373E]">
+        <h2 className="text-2xl mb-4">Finalize the purchase</h2>
+        <div className="flex gap-4">
+          <InputField
+            name="firstname"
+            label="First Name"
+            type="text"
+            formik={formik}
+          />
+          <InputField
+            name="lastname"
+            label="Last Name"
+            type="text"
+            formik={formik}
+          />
         </div>
-      </form>
+        <div className="flex gap-4">
+          <InputField
+            name="address"
+            label="Address"
+            type="text"
+            formik={formik}
+          />
+          <InputField
+            name="phoneNumber"
+            label="Phone Number"
+            type="text"
+            formik={formik}
+          />
+        </div>
+        <div className="flex gap-4">
+          <InputField
+            name="username"
+            label="Username"
+            type="text"
+            formik={formik}
+          />
+          <InputField
+            name="password"
+            label="Password"
+            type="password"
+            formik={formik}
+          />
+        </div>
+        <InputField
+          name="deliveryDate"
+          label="Delivery Date"
+          type="date"
+          formik={formik}
+        />
+        <CheckoutForm formik={formik} handlePaymentClick={handlePaymentClick} />
+      </div>
     </>
   );
-}
+};
 
-const InputButton = "bg-[#EEE8E3] px-2 py-1 outline-none rounded-md";
+export default Checkout;
