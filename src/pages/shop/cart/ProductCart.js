@@ -1,4 +1,6 @@
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import DeleteModal from "../../../modal/shop/cartModal/DeleteCart";
 
 const tableStyle = "border-2 border-[#D6B59F] text-[#30373E] text-md px-3 py-1";
 
@@ -12,6 +14,21 @@ const ProductCart = ({
   onIncrease,
   onDecrease,
 }) => {
+  const [showModal, setShowModal] = useState(false);
+
+  const openModal = () => {
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
+  const handleRemove = () => {
+    onRemove();
+    closeModal();
+  };
+
   return (
     <tr>
       <td className={tableStyle}>
@@ -34,11 +51,17 @@ const ProductCart = ({
       </td>
       <td className={tableStyle}>
         <button
-          onClick={onRemove}
+          onClick={openModal}
           className="px-2 py-1 bg-[#D6B59F] text-[#30373E] font-bold  rounded-lg"
         >
           Delete
         </button>
+        <DeleteModal
+          isOpen={showModal}
+          onClose={closeModal}
+          onConfirm={handleRemove}
+          message="Are you sure you want to delete?"
+        />
       </td>
     </tr>
   );

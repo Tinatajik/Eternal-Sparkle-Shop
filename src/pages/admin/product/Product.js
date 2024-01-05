@@ -17,6 +17,7 @@ import {
   setModalState,
 } from "../../../redux/admin/slices/ProductsSlice";
 import ProductRow from "./ProductRow";
+import Pagination from "../../../component/pagination/Pagination";
 
 const tableStyle = "border-2 border-[#D6B59F] text-[#30373E] text-md px-3 py-1";
 
@@ -264,14 +265,6 @@ const Products = () => {
     }
   };
 
-  const TotalPage = () => {
-    return (
-      <span>
-        Page {currentPage} of {totalPages}
-      </span>
-    );
-  };
-
   return (
     <>
       <Header />
@@ -309,23 +302,13 @@ const Products = () => {
             </>
           )}
         </div>
-        <div className="flex justify-center items-center mt-2">
-          <button
-            onClick={handlePrevPage}
-            className="mx-2"
-            disabled={currentPage === 1}
-          >
-            Prev
-          </button>
-          <TotalPage />
-          <button
-            onClick={handleNextPage}
-            className="mx-2"
-            disabled={currentPage === totalPages}
-          >
-            Next
-          </button>
-        </div>
+
+        <Pagination
+          handlePrevPage={handlePrevPage}
+          handleNextPage={handleNextPage}
+          currentPage={currentPage}
+          totalPages={totalPages}
+        />
         {selectedProduct && isModalOpen && (
           <DeleteModal
             product={selectedProduct}
