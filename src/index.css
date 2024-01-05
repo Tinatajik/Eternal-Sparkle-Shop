@@ -37,3 +37,10 @@ code {
   padding: 0.2rem 0.5rem;
   font-size: 0.8rem;
 }
+.hover-zoom {
+  transition: transform 0.3s ease-in-out;
+}
+
+.hover-zoom:hover {
+  transform: scale(1.1);
+}
