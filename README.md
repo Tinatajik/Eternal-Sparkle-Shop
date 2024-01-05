@@ -2,8 +2,6 @@
 <h3 align="center">Maktab99 Final Project - Tina Tajik</h3>
   
 </br><h2></h2></br>
-
-</br><h2></h2></br>
 <strong>Project Phase 1 : </strong>
 </br>
 
